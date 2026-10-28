@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="description" content="Terminal Steps Lab：在安全的虚拟终端中学习命令。">
+  <title>Terminal Steps Lab</title>
+  <link rel="stylesheet" href="./styles.css?v=20261027_u6">
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand-mark" aria-hidden="true">⌘</div>
+    <div>
+      <p class="eyebrow">个人终端学习实验室</p>
+      <h1>Terminal Steps Lab</h1>
+      <p>看懂命令，亲手操作，安全自动化。</p>
+    </div>
+    <div class="header-actions">
+      <span id="save-status" class="save-status">进度保存在当前浏览器</span>
+      <button id="reset-all" class="button button-quiet" type="button">重置全部进度</button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <aside class="lesson-panel panel" aria-label="课程与任务">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">学习地图</p>
+          <h2 id="unit-title">单元 1 · 我在哪里</h2>
+        </div>
+        <span id="task-progress" class="progress-badge">1 / 4</span>
+      </div>
+      <p id="unit-intro" class="unit-intro">先建立“我在哪、这里有什么、怎么移动、怎么确认”的位置感。</p>
+      <div id="unit-tabs" class="unit-tabs" aria-label="学习单元"></div>
+      <nav id="task-list" class="task-list" aria-label="单元 1 任务"></nav>
+      <div class="route-preview">
+        <p class="eyebrow">完整路线</p>
+        <div class="route-grid">
+          <span class="route-current">01 我在哪里 · 可进入</span>
+          <span class="route-current">02 建立课程工作区 · 可进入</span>
+          <span class="route-current">03 阅读与搜索 · 可进入</span>
+          <span class="route-current">04 排错与独立挑战 · 可进入</span>
+          <span class="route-current">05 输出、日志与自动化 · 可进入</span>
+          <span class="route-current">06 读懂命令与查找帮助 · 可进入</span>
+          <span>07 查找文件与批量选择 · 规划中</span>
+          <span>08 组合命令与处理失败 · 规划中</span>
+          <span>09 运行中的程序与操作安全 · 规划中</span>
+          <span>10 从清单到脚本 · 规划中</span>
+          <span>11 Python 项目工作流 · 规划中</span>
+          <span>12 Git 与 AI CLI 工作流 · 规划中</span>
+        </div>
+      </div>
+    </aside>
+
+    <section class="workspace" aria-label="模拟终端练习区">
+      <div class="simulation-notice"><span aria-hidden="true">ⓘ</span> 这是教学模拟终端，不是电脑上的真实 Shell；所有命令只影响本网页的虚拟文件系统。</div>
+      <section class="task-card panel" aria-labelledby="task-title">
+        <div class="task-copy">
+          <p class="eyebrow" id="task-kicker">当前任务 · 任务 1</p>
+          <h2 id="task-title">用 pwd 确认当前位置</h2>
+          <p id="task-goal"></p>
+          <div class="concept"><span>核心概念</span><strong id="task-concept"></strong></div>
+        </div>
+        <div class="checklist-wrap">
+          <p class="eyebrow">成功清单</p>
+          <ul id="success-list" class="success-list"></ul>
+        </div>
+      </section>
+
+      <section class="terminal-card" aria-label="教学模拟终端">
+        <div class="terminal-topbar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="terminal-title">教学模拟终端</span><span id="terminal-path" class="terminal-path">/home/steven</span></div>
+        <div id="terminal-output" class="terminal-output" role="log" aria-live="polite" aria-label="终端输出"></div>
+        <form id="terminal-form" class="terminal-form">
+          <label for="command-input" class="sr-only">输入模拟终端命令</label>
+          <span id="prompt" class="prompt">steven@lab:~$</span>
+          <input id="command-input" type="text" inputmode="text" autocomplete="off" spellcheck="false" autofocus placeholder="输入 pwd，然后按 Enter" aria-label="输入模拟终端命令" aria-describedby="input-help">
+          <button class="button run-button" type="submit">运行 <span aria-hidden="true">↵</span></button>
+        </form>
+        <p id="input-help" class="terminal-help">Enter 运行 · ↑↓ 浏览历史 · Ctrl+L 清空显示 · Esc 离开输入区</p>
+      </section>
+
+      <section id="feedback" class="feedback panel" aria-live="polite"></section>
+      <div class="below-terminal-actions">
+        <button id="reset-task" class="button button-secondary" type="button">重置本关</button>
+        <button id="next-task" class="button button-primary" type="button" disabled>下一步</button>
+      </div>
+
+      <details class="migration-card panel" id="migration-card">
+        <summary><span>去真实 Mac Terminal 试试</span><small>只读、低风险迁移练习</small></summary>
+        <div id="migration-content"></div>
+      </details>
+    </section>
+
+    <aside class="state-panel panel" aria-label="虚拟目录和当前状态">
+      <div class="panel-heading"><div><p class="eyebrow">虚拟文件系统</p><h2>目录树</h2></div><button id="toggle-tree" class="icon-button" type="button" aria-expanded="true" aria-controls="tree">收起</button></div>
+      <p class="state-note">这是教学环境路径。真实 Mac 的 home 通常不同，请用真实 Terminal 的 `pwd` 确认。</p>
+      <div id="tree" class="tree" role="tree" aria-label="虚拟目录树"></div>
+      <div class="state-summary"><p class="eyebrow">当前状态</p><dl><div><dt>所在目录</dt><dd id="state-path">/home/steven</dd></div><div><dt>已完成</dt><dd id="state-completed">0 / 4</dd></div></dl></div>
+    </aside>
+  </main>
+  <script type="module" src="./src/app.js?v=20261027_u6"></script>
+</body>
+</html>
