@@ -5,80 +5,80 @@ export const SUPPORTED = ['pwd', 'ls', 'cd', 'mkdir', 'touch', 'cp', 'mv', 'cat'
 export const COMMAND_DOCS = {
   pwd: {
     usage: 'pwd',
-    summary: '显示当前虚拟工作目录的绝对路径。',
-    detail: '用法：pwd\n本阶段不接受参数。执行后返回当前所在目录的完整路径。'
+    summary: 'Print your current folder path.',
+    detail: 'Usage: pwd\nThis command takes no arguments. It shows the full path of the folder you are in.'
   },
   ls: {
-    usage: 'ls [目录路径]',
-    summary: '列出目录内容。',
-    detail: '用法：ls [目录路径]\n无参数时列出当前工作目录内容；有参数时列出指定目录内容。\n限制：本模拟器仅支持一个目录路径参数，不支持 -l、-a 等选项。'
+    usage: 'ls [folder_path]',
+    summary: 'List the contents of a folder.',
+    detail: 'Usage: ls [folder_path]\nWithout arguments, it lists files and folders in your current folder. With a path, it lists that folder.\nNote: Options like -l or -a are not supported here.'
   },
   cd: {
-    usage: 'cd [目录路径]',
-    summary: '切换当前工作目录。',
-    detail: '用法：cd [目录路径]\n无参数时返回 home 目录（~）；支持相对路径、绝对路径、.、.. 与 ~。\n提示：若目录名包含空格，必须使用单引号或双引号包裹，例如 cd "Summer Camp"。'
+    usage: 'cd [folder_path]',
+    summary: 'Change your current folder.',
+    detail: 'Usage: cd [folder_path]\nWithout arguments, it returns to your home folder (~). You can use relative paths, absolute paths, ., .., and ~.\nTip: If a folder name has spaces, wrap it in quotes, such as cd "Summer Camp".'
   },
   mkdir: {
-    usage: 'mkdir 目录路径',
-    summary: '创建一个新目录。',
-    detail: '用法：mkdir 目录路径\n在指定路径创建一个空目录。\n限制：不支持 -p；若目标已存在或父目录不存在将拒绝操作。'
+    usage: 'mkdir folder_path',
+    summary: 'Create a new folder.',
+    detail: 'Usage: mkdir folder_path\nCreates an empty folder at the given path.\nNote: -p is not supported. It will not overwrite existing files or folders.'
   },
   touch: {
-    usage: 'touch 文件路径',
-    summary: '创建一个空文件。',
-    detail: '用法：touch 文件路径\n在指定路径创建一个空文件；若文件已存在，保留原内容不清空。'
+    usage: 'touch file_path',
+    summary: 'Create a new empty file.',
+    detail: 'Usage: touch file_path\nCreates an empty file at the given path. If the file already exists, its content is kept.'
   },
   cp: {
-    usage: 'cp 源文件 目标',
-    summary: '复制单个文件。',
-    detail: '用法：cp 源文件 目标路径\n复制单个文件，并完整保留源文件。\n安全保护：拒绝覆盖已有目标文件，保护原数据不丢失。'
+    usage: 'cp source_file target',
+    summary: 'Copy a single file.',
+    detail: 'Usage: cp source_file target_path\nCopies a file and keeps the original file.\nSafety: Refuses to overwrite an existing file to protect your data.'
   },
   mv: {
-    usage: 'mv 源文件 目标',
-    summary: '移动或重命名单个文件。',
-    detail: '用法：mv 源文件 目标路径\n将源文件移动或重命名至目标路径，原路径消失。\n安全保护：拒绝覆盖已有目标文件。'
+    usage: 'mv source_file target',
+    summary: 'Move or rename a single file.',
+    detail: 'Usage: mv source_file target_path\nMoves or renames a file to the target path. The old path is removed.\nSafety: Refuses to overwrite an existing file.'
   },
   cat: {
-    usage: 'cat 文件路径',
-    summary: '原样读取并显示文本文件内容。',
-    detail: '用法：cat 文件路径\n读取指定文件并在终端输出原文，不修改文件内容。\n限制：本阶段每次仅读取一个文件，不支持多文件拼接。'
+    usage: 'cat file_path',
+    summary: 'Read and display file contents.',
+    detail: 'Usage: cat file_path\nDisplays text from a file. Reading a file does not change its content.\nNote: Only one file at a time is supported here.'
   },
   grep: {
-    usage: 'grep [-i] 关键词 文件路径',
-    summary: '在文件中字面搜索包含关键词的行。',
-    detail: '用法：grep [-i] 关键词 文件路径\n返回包含关键词的所有匹配整行。默认区分大小写，加入 -i 选项可忽略大小写。\n限制：本模拟器仅支持字面文本搜索，不支持正则表达式。'
+    usage: 'grep [-i] keyword file_path',
+    summary: 'Search for text in a file.',
+    detail: 'Usage: grep [-i] keyword file_path\nPrints lines that contain the keyword. It is case-sensitive by default. Add -i to ignore case.\nNote: This simulator searches for exact text matches, not regular expressions.'
   },
   wc: {
-    usage: 'wc -l 文件路径',
-    summary: '统计文件中的换行符行数。',
-    detail: '用法：wc -l 文件路径\n统计并输出文件中的换行符数量。\n支持：必须带 -l 选项；可配合管道 grep ... | wc -l 统计匹配行数。\n限制：本模拟器不支持 -w、-c 等其他选项。'
+    usage: 'wc -l file_path',
+    summary: 'Count lines in a file.',
+    detail: 'Usage: wc -l file_path\nCounts newline characters in a file.\nNote: Must use -l. Can be used with a pipe: grep ... | wc -l.'
   },
   echo: {
-    usage: 'echo [文本]',
-    summary: '在终端输出文本内容。',
-    detail: '用法：echo [文本]\n将参数文本打印至终端。带空格的文本建议用引号包裹。\n支持：可结合 > 或 >> 输出重定向写入文件。'
+    usage: 'echo [text]',
+    summary: 'Print text to the terminal.',
+    detail: 'Usage: echo [text]\nPrints your text to the screen. Wrap text with spaces in quotes.\nTip: You can use > or >> to redirect output into a file.'
   },
   run: {
-    usage: 'run 脚本文件',
-    summary: '【网站专用教学命令】顺序执行清单中的命令。',
-    detail: '用法：run 脚本文件\n【网站专用教学命令，非系统通用 Shell 命令】\n按顺序执行文件中的每行命令，自动跳过空行与 # 开头的注释行。\n遇到首个错误立即停止并报告行号。不支持变量、循环或嵌套 run。'
+    usage: 'run script_file',
+    summary: '[Practice Tool] Run commands from a file in order.',
+    detail: 'Usage: run script_file\n[Lab practice tool, not a standard system shell command]\nRuns each command in the file one by one. Skips empty lines and comments (#).\nStops immediately if an error occurs. Loops and nested run commands are not supported.'
   },
   help: {
-    usage: 'help [命令名]',
-    summary: '查看支持的命令或具体命令的用法说明。',
-    detail: '用法：help [命令名]\n直接输入 help 查看全部可用命令概览；输入 help <命令名> 查看指定命令的详细用法与限制说明。'
+    usage: 'help [command_name]',
+    summary: 'Show available commands or help for a command.',
+    detail: 'Usage: help [command_name]\nType help to see all commands. Type help <command_name> (like help wc) to see usage and limits for that command.'
   },
   clear: {
     usage: 'clear',
-    summary: '清空终端屏幕显示。',
-    detail: '用法：clear 或快捷键 Ctrl+L\n清空终端屏幕历史显示；不改变当前工作目录、文件系统或学习进度。'
+    summary: 'Clear the terminal screen.',
+    detail: 'Usage: clear (or press Ctrl+L)\nClears the terminal screen. Does not change your current folder, files, or progress.'
   }
 };
 
 function failure(message, teaching = '') { return { ok: false, output: message, teaching, changed: false, mutated: false }; }
 function success(output = '', teaching = '', changed = false, mutated = false, extra = {}) { return { ok: true, output, teaching, changed, mutated, ...extra }; }
-function optionFailure(command) { return failure(`${command}：本阶段尚未支持选项。`, `先使用 ${command} 的基础形式；本轮不支持带选项的写法。`); }
-function parentFailure(path, cwd) { return failure(`路径不存在：${path}`, `你当前位于 ${cwd}。请先确认父目录存在，失败时文件系统不会改变。`); }
+function optionFailure(command) { return failure(`${command}: options are not supported in this stage.`, `Use the basic form of ${command}.`); }
+function parentFailure(path, cwd) { return failure(`Path does not exist: ${path}`, `You are in ${cwd}. Check that the parent folder exists. Files were not changed.`); }
 
 function resolveDestination(root, rawTarget, cwd, source) {
   const targetPath = normalizePath(rawTarget, cwd);
@@ -100,7 +100,7 @@ function splitPipeline(input) {
     if (char === '"' || char === "'") { quote = char; continue; }
     if (char === '|') { separator = index; count += 1; }
   }
-  if (count > 1) return { error: '本模拟器只支持一条有限管道。', teaching: '本轮只支持 grep ... | wc -l。' };
+  if (count > 1) return { error: 'This simulator only supports a single pipe.', teaching: 'Only grep ... | wc -l is supported.' };
   if (separator < 0) return { left: null, right: null };
   return { left: input.slice(0, separator).trim(), right: input.slice(separator + 1).trim() };
 }
@@ -125,7 +125,7 @@ function splitRedirection(input) {
       }
     }
   }
-  if (count > 1) return { error: '本模拟器只支持单个重定向符号（> 或 >>）。', teaching: '本阶段不支持多重重定向。' };
+  if (count > 1) return { error: 'Only a single redirection operator (> or >>) is supported.', teaching: 'Multiple redirections are not supported.' };
   if (!op) return { left: null, right: null, op: null };
   const left = input.slice(0, opIndex).trim();
   const right = input.slice(opIndex + op.length).trim();
@@ -146,8 +146,8 @@ function hasUnsupportedSyntax(input) {
 function readFile(root, rawPath, cwd, command) {
   const path = normalizePath(rawPath, cwd);
   const node = getNode(root, path);
-  if (!node) return { error: failure(`${command}: ${rawPath}: 文件不存在`, `你当前位于 ${cwd}。请检查文件路径；文件系统没有改变。`) };
-  if (node.type !== 'file') return { error: failure(`${command}: ${rawPath}: 是目录`, `${command} 本轮只读取文件，不读取目录。`) };
+  if (!node) return { error: failure(`${command}: ${rawPath}: No such file`, `You are in ${cwd}. Check the file path. Files were not changed.`) };
+  if (node.type !== 'file') return { error: failure(`${command}: ${rawPath}: Is a directory`, `${command} only reads files, not folders.`) };
   return { path, node };
 }
 
@@ -157,49 +157,49 @@ function executeGrep(args, state) {
   let ignoreCase = false;
   if (args[0] === '-i') { ignoreCase = true; args = args.slice(1); }
   else if (args[0]?.startsWith('-')) return optionFailure('grep');
-  if (args.length !== 2) return failure('grep：需要关键词和一个文件路径两个参数。', '命令结构：grep [-i] 关键词 文件。');
+  if (args.length !== 2) return failure('grep: requires a keyword and a file path.', 'Structure: grep [-i] keyword file.');
   const [keyword, rawPath] = args;
-  if (!keyword) return failure('grep：关键词不能为空。', '本教学模拟器只支持对非空字面文本进行搜索。');
+  if (!keyword) return failure('grep: keyword cannot be empty.', 'Search for non-empty text.');
   const read = readFile(state.root, rawPath, state.cwd, 'grep');
   if (read.error) return read.error;
   const needle = ignoreCase ? keyword.toLocaleLowerCase() : keyword;
   const matches = lineContent(read.node.content).filter(line => (ignoreCase ? line.toLocaleLowerCase() : line).includes(needle));
-  return success(matches.join('\n'), matches.length ? `找到 ${matches.length} 行匹配内容。这里是字面搜索，不是完整正则表达式 grep。` : '没有匹配行；这是有效的搜索结果，不是命令格式错误。', false, false, { matchedLines: matches, grep: true, path: read.path, ignoreCase, keyword });
+  return success(matches.join('\n'), matches.length ? `Found ${matches.length} matching line(s). This is exact text search.` : 'No matching lines found. This is a valid search result, not an error.', false, false, { matchedLines: matches, grep: true, path: read.path, ignoreCase, keyword });
 }
 
 function executePipeline(input, state) {
   const parts = splitPipeline(input);
   if (parts.error) return failure(parts.error, parts.teaching);
-  if (!parts.left) return failure('管道左侧不能为空。', '本轮格式是 grep [-i] 关键词 文件 | wc -l。');
-  if (parts.right !== 'wc -l') return failure('不支持的管道组合。', '本轮只支持 grep [-i] 关键词 文件 | wc -l。');
+  if (!parts.left) return failure('Left side of pipe cannot be empty.', 'Format: grep [-i] keyword file | wc -l.');
+  if (parts.right !== 'wc -l') return failure('Unsupported pipeline combination.', 'Only grep [-i] keyword file | wc -l is supported.');
   const left = tokenize(parts.left);
-  if (left.error) return failure(left.error, '请补上引号后再运行。');
-  if (left.tokens[0] !== 'grep') return failure('管道左侧必须是 grep。', '本轮只统计 grep 输出的匹配行。');
+  if (left.error) return failure(left.error, 'Fix the unclosed quote before running.');
+  if (left.tokens[0] !== 'grep') return failure('Left side of pipe must be grep.', 'Only grep output can be counted in this pipe.');
   const grepResult = executeGrep(left.tokens.slice(1), state);
   if (!grepResult.ok) return grepResult;
-  return success(String(grepResult.matchedLines.length), `wc -l 统计左侧 grep 实际输出的匹配行数：${grepResult.matchedLines.length}。同一行多个关键词仍只计一行。`, false, false, { pipeline: true, matchedLines: grepResult.matchedLines });
+  return success(String(grepResult.matchedLines.length), `wc -l counted ${grepResult.matchedLines.length} line(s) from grep. Multiple keywords on the same line count as one line.`, false, false, { pipeline: true, matchedLines: grepResult.matchedLines });
 }
 
 function executeRedirection(redirection, state, options) {
   if (!redirection.left) {
-    return failure('重定向左侧不能为空。', '请在重定向符号左侧提供可执行的命令，例如 echo 或 cat。');
+    return failure('Left side of redirection cannot be empty.', 'Provide a command like echo or cat on the left.');
   }
   if (!redirection.right) {
-    return failure('重定向缺少目标文件路径。', `命令结构：命令 ${redirection.op} 目标文件。`);
+    return failure('Missing target file path for redirection.', `Structure: command ${redirection.op} target_file.`);
   }
   const rightParsed = tokenize(redirection.right);
-  if (rightParsed.error) return failure(rightParsed.error, '目标文件名格式有误。');
+  if (rightParsed.error) return failure(rightParsed.error, 'Target file path format is invalid.');
   if (rightParsed.tokens.length !== 1) {
-    return failure('重定向目标路径无效。', '重定向右侧只接受一个目标文件路径。');
+    return failure('Target file path is not valid.', 'Redirection takes only one target file path.');
   }
   const targetPath = rightParsed.tokens[0];
 
   const leftParsed = tokenize(redirection.left);
-  if (leftParsed.error) return failure(leftParsed.error, '左侧命令引号未闭合。');
-  if (!leftParsed.tokens.length) return failure('重定向左侧不能为空。', '请在重定向符号左侧提供命令。');
+  if (leftParsed.error) return failure(leftParsed.error, 'Unclosed quote on left side of redirection.');
+  if (!leftParsed.tokens.length) return failure('Left side of redirection cannot be empty.', 'Provide a command on the left.');
   const leftCmd = leftParsed.tokens[0];
   if (leftCmd !== 'echo' && leftCmd !== 'cat') {
-    return failure(`${leftCmd}：本阶段重定向仅支持 echo 和 cat。`, '你可以使用 echo 文本 > 文件，或 cat 文件 > 新文件。');
+    return failure(`${leftCmd}: only echo and cat support redirection here.`, 'Use echo text > file or cat file > file.');
   }
 
   let contentToWrite = '';
@@ -215,7 +215,7 @@ function executeRedirection(redirection, state, options) {
   const destPath = normalizePath(targetPath, state.cwd);
   const targetNode = getNode(state.root, destPath);
   if (targetNode?.type === 'dir') {
-    return failure(`重定向失败：${targetPath}: 是目录`, '重定向目标必须是文件，不能是目录。');
+    return failure(`Redirection failed: ${targetPath}: Is a directory`, 'Redirection target must be a file, not a folder.');
   }
   const parentInfo = getParent(state.root, destPath);
   if (!parentInfo?.parent || parentInfo.parent.type !== 'dir') {
@@ -228,32 +228,32 @@ function executeRedirection(redirection, state, options) {
     } else {
       addChild(state.root, destPath, file(parentInfo.name, contentToWrite));
     }
-    return success('', `已将输出重定向写入 ${destPath}（已覆盖原内容）。`, false, true, { redirection: true, op: '>', targetPath: destPath, content: contentToWrite });
+    return success('', `Output redirected to ${destPath} (overwrote previous content).`, false, true, { redirection: true, op: '>', targetPath: destPath, content: contentToWrite });
   } else {
     if (targetNode) {
       targetNode.content += contentToWrite;
     } else {
       addChild(state.root, destPath, file(parentInfo.name, contentToWrite));
     }
-    return success('', `已将输出追加写入 ${destPath}。`, false, true, { redirection: true, op: '>>', targetPath: destPath, content: contentToWrite });
+    return success('', `Output appended to ${destPath}.`, false, true, { redirection: true, op: '>>', targetPath: destPath, content: contentToWrite });
   }
 }
 
 function executeRun(args, state, options = {}) {
   if (options.isScript) {
-    return failure('run：禁止在脚本中嵌套执行 run。', '本教学模拟器不支持脚本递归或嵌套调用。');
+    return failure('run: cannot nest run inside a script.', 'Recursive scripts are not supported.');
   }
   if (args.length !== 1) {
-    return failure('run：需要一个脚本文件路径。', '命令结构：run 脚本路径；run 是本教学模拟器专用的命令清单执行器。');
+    return failure('run: requires a script file path.', 'Structure: run script_path. run is a practice list runner.');
   }
   const read = readFile(state.root, args[0], state.cwd, 'run');
   if (read.error) return read.error;
   if (read.node.content.length > 10240) {
-    return failure('run：脚本文件过大（超过 10KB 上限）。', '教学清单应保持简短清晰。');
+    return failure('run: script file is too large (over 10KB limit).', 'Practice lists should stay short and clear.');
   }
   const rawLines = read.node.content.split(/\r?\n/);
   if (rawLines.length > 50) {
-    return failure('run：脚本行数过多（超过 50 行上限）。', '教学清单应保持简短清晰。');
+    return failure('run: script has too many lines (over 50 lines limit).', 'Practice lists should stay short and clear.');
   }
   const executedLines = [];
   let anyMutated = false;
@@ -264,11 +264,11 @@ function executeRun(args, state, options = {}) {
     if (!trimmed || trimmed.startsWith('#')) continue;
     const tokens = tokenize(trimmed);
     if (!tokens.error && tokens.tokens[0] === 'run') {
-      return failure(`run：第 ${lineNum} 行错误：禁止在脚本中嵌套执行 run。`, '本教学模拟器不支持脚本递归或嵌套调用。');
+      return failure(`run: Line ${lineNum} error: cannot nest run inside a script.`, 'Recursive scripts are not supported.');
     }
     const res = executeCommand(trimmed, state, { isScript: true });
     if (!res.ok) {
-      return failure(`run：执行中断于第 ${lineNum} 行：${trimmed}\n原因：${res.output}`, `前序已执行的修改已保留；${res.teaching || ''}`);
+      return failure(`run: stopped at line ${lineNum}: ${trimmed}\nReason: ${res.output}`, `Earlier changes were kept. ${res.teaching || ''}`);
     }
     if (res.mutated) anyMutated = true;
     if (res.changed) {
@@ -280,13 +280,13 @@ function executeRun(args, state, options = {}) {
       state.successfulCommands.push(trimmed);
     }
     if (res.output) {
-      executedLines.push(`[第 ${lineNum} 行] ${trimmed}\n${res.output}`);
+      executedLines.push(`[Line ${lineNum}] ${trimmed}\n${res.output}`);
     } else {
-      executedLines.push(`[第 ${lineNum} 行] ${trimmed}`);
+      executedLines.push(`[Line ${lineNum}] ${trimmed}`);
     }
   }
   const summaryOutput = executedLines.join('\n');
-  return success(summaryOutput, '自动化清单执行完毕。run 是本教学模拟器专用命令，用于按顺序执行命令清单。', anyChanged, anyMutated, { run: true, scriptPath: read.path, executedCount: executedLines.length });
+  return success(summaryOutput, 'Automated list finished. run executes commands in a file one by one.', anyChanged, anyMutated, { run: true, scriptPath: read.path, executedCount: executedLines.length });
 }
 
 export function executeCommand(input, state, options = {}) {
@@ -295,112 +295,112 @@ export function executeCommand(input, state, options = {}) {
   const pipeline = splitPipeline(input);
   if (pipeline.error) return failure(pipeline.error, pipeline.teaching);
   if (redirection.op && pipeline.left !== null) {
-    return failure('本模拟器尚不支持同时使用管道与重定向。', '请分开使用管道或重定向。');
+    return failure('This simulator does not support combining pipe and redirection.', 'Use a pipe or redirection separately.');
   }
   if (redirection.op) return executeRedirection(redirection, state, options);
   if (pipeline.left !== null) return executePipeline(input, state);
-  if (hasUnsupportedSyntax(input)) return failure('本模拟器尚不支持通配符、多命令连接或其他复杂语法。', '本轮请一次输入一条基础命令；引号中的特殊字符可以作为字面搜索内容。');
+  if (hasUnsupportedSyntax(input)) return failure('Wildcards, semicolons, and complex syntax are not supported.', 'Enter one basic command at a time.');
   const parsed = tokenize(input.trim());
-  if (parsed.error) return failure(parsed.error, '引号中的空格和特殊符号会保留在同一个参数里。');
+  if (parsed.error) return failure(parsed.error, 'Unclosed quotes. Make sure opening and closing quotes match.');
   if (!parsed.tokens.length) return success();
   const [command, ...args] = parsed.tokens;
-  if (!SUPPORTED.includes(command)) return failure(`命令未支持：${command}`, `这是练习环境的范围限制；当前支持：${SUPPORTED.join(', ')}。`);
-  if (command === 'clear') return success('', 'clear 只清空终端显示，不改变目录、任务或进度。', false, false, { clear: true });
+  if (!SUPPORTED.includes(command)) return failure(`Command not supported: ${command}`, `Supported commands: ${SUPPORTED.join(', ')}.`);
+  if (command === 'clear') return success('', 'clear clears the screen display. It does not change folders, files, or progress.', false, false, { clear: true });
   if (command === 'help') {
-    if (args.length > 1) return failure('help：一次只接受一个命令名参数。', '结构：help [命令名]，例如 help wc。');
+    if (args.length > 1) return failure('help: takes only one command name argument.', 'Structure: help [command_name], for example help wc.');
     if (args.length === 1) {
       const target = args[0].toLowerCase();
       const doc = COMMAND_DOCS[target];
-      if (!doc) return failure(`help: 未知命令 "${args[0]}"`, `当前支持的命令：${SUPPORTED.join(', ')}。输入 help 查看完整列表。`);
-      return success(`${doc.usage}\n${doc.summary}\n\n${doc.detail}`, '仔细阅读命令语法与限制，避免误用参数。', false, false, { help: true, commandHelp: target });
+      if (!doc) return failure(`help: unknown command "${args[0]}"`, `Supported commands: ${SUPPORTED.join(', ')}. Type help to see the full list.`);
+      return success(`${doc.usage}\n${doc.summary}\n\n${doc.detail}`, 'Read the command syntax and limits carefully.', false, false, { help: true, commandHelp: target });
     }
-    return success('支持的命令：\npwd              显示当前绝对路径\nls [目录路径]    列出目录内容\ncd [目录路径]    进入目录；无参数返回 home\nmkdir 目录路径   创建一个目录（不支持 -p）\ntouch 文件路径   创建文件；已有文件内容不清空\ncp 源文件 目标   复制单个文件，不覆盖\nmv 源文件 目标   移动或重命名单个文件，不覆盖\ncat 文件         原样读取一个文本文件\ngrep [-i] 关键词 文件  字面搜索并返回匹配行\nwc -l 文件       统计换行符数量\ngrep ... | wc -l  仅支持有限的匹配行统计管道\necho [文本]      在终端输出文本\n> / >>           输出重定向（> 覆盖，>> 追加；仅支持 echo 和 cat）\nrun 脚本文件     【网站专用】按顺序执行文件中的命令清单\nhelp [命令名]    查看命令说明（例如 help wc）\nclear            清空终端显示\n\n支持：绝对/相对路径、.、..、~、单引号和双引号。\ngrep 是本教学模拟器的字面搜索子集；wc -l 统计换行符数量。\nrun 是本网站专用的教学命令，非通用 Shell 命令，不支持循环、变量或嵌套 run。\n重定向目前仅支持 echo 文本 [>|>>] 文件 以及 cat 文件 [>|>>] 文件。\n拒绝覆盖是 cp/mv 的安全保护，> 覆盖写入是重定向的标准行为。\n本轮不支持通配符、环境变量、多命令连接或任意复杂重定向。', 'help 只说明本模拟器已实现的范围。可使用 help <命令名> 查看具体命令用法。', false, false, { help: true, commandHelp: null });
+    return success('Supported commands:\npwd              Print current folder path\nls [path]        List folder contents\ncd [path]        Change folder; no arguments returns to home\nmkdir path       Create a folder (no -p)\ntouch path       Create a file; existing files are kept\ncp source dest   Copy a single file, will not overwrite\nmv source dest   Move or rename a single file, will not overwrite\ncat file         Read a text file\ngrep [-i] kw f   Search for lines matching keyword\nwc -l file       Count lines in a file\ngrep ... | wc -l Simple pipeline to count matching lines\necho [text]      Print text to the terminal\n> / >>           Redirect output (> overwrite, >> append; echo & cat only)\nrun script       [Practice Tool] Run commands listed in a file\nhelp [command]   Show help (for example: help wc)\nclear            Clear terminal screen\n\nSupported: Absolute/relative paths, ., .., ~, single and double quotes.\ngrep searches for exact text; wc -l counts newlines.\nrun is a lab practice command, not a general shell command.\nRedirection supports: echo text [>|>>] file and cat file [>|>>] file.\nSafe copy/move refuses to overwrite existing files. > overwrites by design.\nWildcards, environment variables, and complex command chains are not supported.', 'Type help <command_name> to view detailed usage for a command.', false, false, { help: true, commandHelp: null });
   }
   if (command === 'pwd') {
-    if (args.length) return failure('pwd：本阶段不接受参数。', '先只输入 pwd，观察当前目录。');
-    return success(state.cwd, '这是当前虚拟目录的绝对路径。');
+    if (args.length) return failure('pwd: does not take arguments.', 'Type pwd by itself to see your current folder.');
+    return success(state.cwd, 'This is the absolute path of your current practice folder.');
   }
   if (command === 'ls') {
     if (args.some(arg => arg.startsWith('-'))) return optionFailure('ls');
-    if (args.length > 1) return failure('ls：本阶段只接受一个目录路径参数。', '结构是 ls [目录路径]。');
+    if (args.length > 1) return failure('ls: takes only one folder path argument.', 'Structure: ls [folder_path].');
     const targetPath = normalizePath(args[0] ?? '.', state.cwd);
     const node = getNode(state.root, targetPath);
-    if (!node) return failure(`ls: ${args[0]}: 目录不存在`, `你当前位于 ${state.cwd}。可以先用 ls 查看这里有哪些目录。`);
-    if (node.type !== 'dir') return failure(`ls: ${args[0]}: 不是目录`, 'ls 需要查看目录；请换成目录路径。');
-    return success(Object.values(node.children).map(displayName).join('  '), `已列出 ${targetPath} 的内容。`);
+    if (!node) return failure(`ls: ${args[0]}: No such directory`, `You are in ${state.cwd}. Type ls to see folders here.`);
+    if (node.type !== 'dir') return failure(`ls: ${args[0]}: Not a directory`, 'ls needs a folder path.');
+    return success(Object.values(node.children).map(displayName).join('  '), `Listed contents of ${targetPath}.`);
   }
   if (command === 'cd') {
     if (args.some(arg => arg.startsWith('-'))) return optionFailure('cd');
-    if (args.length > 1) return failure('cd：本阶段只接受一个目录路径参数。', '路径含空格时请使用引号，例如 cd "Summer Camp"。');
+    if (args.length > 1) return failure('cd: takes only one folder path argument.', 'If a folder name has spaces, wrap it in quotes: cd "Summer Camp".');
     const targetPath = normalizePath(args[0] ?? '~', state.cwd);
     const node = getNode(state.root, targetPath);
-    if (!node) return failure(`cd: ${args[0] ?? '~'}: 目录不存在`, `你当前位于 ${state.cwd}，路径没有改变。`);
-    if (node.type !== 'dir') return failure(`cd: ${args[0]}: 不是目录`, 'cd 只能进入目录，不能进入文件；路径没有改变。');
-    return success(targetPath, `已进入 ${targetPath}。`, true);
+    if (!node) return failure(`cd: ${args[0] ?? '~'}: No such directory`, `You are in ${state.cwd}. Your location did not change.`);
+    if (node.type !== 'dir') return failure(`cd: ${args[0]}: Not a directory`, 'cd only enters folders, not files. Your location did not change.');
+    return success(targetPath, `Entered ${targetPath}.`, true);
   }
   if (command === 'mkdir') {
     if (args.some(arg => arg.startsWith('-'))) return optionFailure('mkdir');
-    if (args.length !== 1) return failure('mkdir：需要一个目录路径参数。', '命令结构：mkdir 目录路径。');
+    if (args.length !== 1) return failure('mkdir: requires one folder path argument.', 'Structure: mkdir folder_path.');
     const targetPath = normalizePath(args[0], state.cwd);
-    if (getNode(state.root, targetPath)) return failure(`mkdir: ${args[0]}: 目录或文件已存在`, '本模拟器拒绝覆盖或替换已有对象。');
+    if (getNode(state.root, targetPath)) return failure(`mkdir: ${args[0]}: File or folder already exists`, 'This simulator refuses to overwrite existing objects.');
     const info = getParent(state.root, targetPath);
     if (!info?.parent || info.parent.type !== 'dir') return parentFailure(args[0], state.cwd);
     addChild(state.root, targetPath, dir(info.name));
-    return success(`已创建目录 ${targetPath}`, 'mkdir 创建了一个目录。', false, true);
+    return success(`Created folder ${targetPath}`, 'mkdir created a new folder.', false, true);
   }
   if (command === 'touch') {
     if (args.some(arg => arg.startsWith('-'))) return optionFailure('touch');
-    if (args.length !== 1) return failure('touch：需要一个文件路径参数。', '命令结构：touch 文件路径。');
+    if (args.length !== 1) return failure('touch: requires one file path argument.', 'Structure: touch file_path.');
     const targetPath = normalizePath(args[0], state.cwd);
     const existing = getNode(state.root, targetPath);
-    if (existing?.type === 'dir') return failure(`touch: ${args[0]}: 是目录`, 'touch 的目标必须是文件；文件系统没有改变。');
-    if (existing?.type === 'file') return success(`文件已存在，内容保持不变 ${targetPath}`, '本模拟器不模拟时间戳；已有文件不会被清空。');
+    if (existing?.type === 'dir') return failure(`touch: ${args[0]}: Is a directory`, 'touch target must be a file path. Files were not changed.');
+    if (existing?.type === 'file') return success(`File already exists; content kept at ${targetPath}`, 'Existing file was kept unchanged.');
     const info = getParent(state.root, targetPath);
     if (!info?.parent || info.parent.type !== 'dir') return parentFailure(args[0], state.cwd);
     addChild(state.root, targetPath, file(info.name));
-    return success(`已创建空文件 ${targetPath}`, 'touch 在指定位置创建了一个空文件。', false, true);
+    return success(`Created empty file ${targetPath}`, 'touch created an empty file.', false, true);
   }
   if (command === 'cp' || command === 'mv') {
     if (args.some(arg => arg.startsWith('-'))) return optionFailure(command);
-    if (args.length !== 2) return failure(`${command}：需要源路径和目标路径两个参数。`, `命令结构：${command} 源文件 目标路径。`);
+    if (args.length !== 2) return failure(`${command}: requires two arguments: source and target.`, `Structure: ${command} source_file target_path.`);
     const sourcePath = normalizePath(args[0], state.cwd);
     const source = getNode(state.root, sourcePath);
-    if (!source) return failure(`${command}: ${args[0]}: 源文件不存在`, '请先确认源文件路径；失败时文件系统不会改变。');
-    if (source.type !== 'file') return failure(`${command}: ${args[0]}: 不支持目录操作`, `本轮 ${command} 只处理单个文件，不支持目录递归复制或目录移动。`);
+    if (!source) return failure(`${command}: ${args[0]}: Source file does not exist`, 'Check the source file path. Files were not changed.');
+    if (source.type !== 'file') return failure(`${command}: ${args[0]}: Directory operations are not supported`, `${command} only copies or moves single files.`);
     const destination = resolveDestination(state.root, args[1], state.cwd, source);
-    if (destination.path === sourcePath) return failure(`${command}: 源路径和目标路径相同`, '源和目标必须是不同路径；文件系统没有改变。');
-    if (destination.target) return failure(`${command}: 目标已存在，拒绝覆盖`, '这是本教学模拟器的安全保护；请换一个不存在的目标路径。');
+    if (destination.path === sourcePath) return failure(`${command}: Source and target paths are identical`, 'Source and target must be different.');
+    if (destination.target) return failure(`${command}: Target already exists, refusing to overwrite`, 'Safety check: Choose a different target path.');
     const info = getParent(state.root, destination.path);
     if (!info?.parent || info.parent.type !== 'dir') return parentFailure(args[1], state.cwd);
     if (command === 'cp') {
       addChild(state.root, destination.path, file(info.name, source.content));
-      return success(`已复制文件到 ${destination.path}`, 'cp 复制了文件，源文件仍然保留。', false, true);
+      return success(`Copied file to ${destination.path}`, 'cp copied the file. Source file was kept.', false, true);
     }
     const moved = removeChild(state.root, sourcePath);
     moved.name = info.name;
     addChild(state.root, destination.path, moved);
-    return success(`已移动文件到 ${destination.path}`, 'mv 移动或重命名了文件，原路径不再存在。', false, true);
+    return success(`Moved file to ${destination.path}`, 'mv moved or renamed the file. Old path is gone.', false, true);
   }
   if (command === 'cat') {
-    if (args.length !== 1) return failure('cat：需要一个文件路径参数。', '本轮不支持多个文件拼接；命令结构：cat 文件。');
+    if (args.length !== 1) return failure('cat: requires one file path argument.', 'Structure: cat file_path.');
     const read = readFile(state.root, args[0], state.cwd, 'cat');
     if (read.error) return read.error;
-    return success(read.node.content, 'cat 读取并显示文件内容，不会修改文件。', false, false, { cat: true, path: read.path });
+    return success(read.node.content, 'cat reads and displays file content. It does not change the file.', false, false, { cat: true, path: read.path });
   }
   if (command === 'grep') return executeGrep(args, state);
   if (command === 'wc') {
-    if (args[0] !== '-l' || args.length !== 2) return failure('wc：本轮只支持 wc -l 文件。', '命令结构：wc -l 文件；管道右侧只支持 wc -l。');
+    if (args[0] !== '-l' || args.length !== 2) return failure('wc: only wc -l file is supported here.', 'Structure: wc -l file.');
     const read = readFile(state.root, args[1], state.cwd, 'wc');
     if (read.error) return read.error;
     const count = (read.node.content.match(/\n/g) || []).length;
-    return success(String(count), `wc -l 统计换行符数量：${count}。末尾没有换行的文本不会额外计数。`, false, false, { wc: true, newlineCount: count, path: read.path });
+    return success(String(count), `wc -l counted ${count} line(s). Text without a trailing newline is not counted as an extra line.`, false, false, { wc: true, newlineCount: count, path: read.path });
   }
   if (command === 'echo') {
     const text = args.join(' ');
-    return success(text, 'echo 输出文本到终端。', false, false, { echo: true, text });
+    return success(text, 'echo prints text to the terminal.', false, false, { echo: true, text });
   }
   if (command === 'run') {
     return executeRun(args, state, options);
   }
-  return failure('未知错误');
+  return failure('Unknown command error');
 }

@@ -1,176 +1,157 @@
-# Terminal Steps Lab 项目状态
+# Terminal Steps Lab Project Status
 
-## 项目目标和当前阶段
+## Project Goal and Current Stage
 
-目标：建立一个可在浏览器中练习终端基础操作的安全模拟环境，帮助成年初学者把命令、当前目录、输出和验证联系起来。
+Goal: Build a safe, in-browser terminal practice environment. Help adult beginners connect commands, current folders, terminal output, and verification habits.
 
-当前阶段：第六阶段单元 6「读懂命令与查找帮助」代码及测试已全部完成，等待用户在浏览器中进行单元 3、4、5、6 的人工验收；单元 7～12 为后续规划。
+Current Stage: Unit 6 "Command Structure and Help" code and automated tests are complete. Awaiting user manual verification in the browser for Units 3, 4, 5, and 6. Units 7–12 remain in planning.
 
-第一阶段人工验证状态：页面可打开；输入框正常输入；可以执行多条命令并显示输出；错误输入 `cd steven, pwd` 被拒绝且当前目录保持不变。任务 4 未因最终目录状态巧合而自动标记完成，仍要求先 `cd ..` 再 `pwd`。
+Unit 1 manual verification: Page opens. Input box works. Commands run and show output. Invalid input like `cd steven, pwd` is rejected and current folder stays unchanged. Task 4 requires `cd ..` followed by `pwd`.
 
-第二阶段人工验证状态：四个任务可以正常操作并完成；目录树变化符合预期。重置、错误输入和刷新行为：未完全人工遍历。
+Unit 2 manual verification: 4 tasks work and complete. Folder tree updates match expectations. Reset, invalid inputs, and page reloads are partially tested.
 
-第三、四、五、六阶段人工验证状态：未进行真实浏览器验收（本环境受沙箱安全限制，无法绑定网络端口或启动浏览器自动化，代码与单元测试全部通过，待用户在本地 Mac Terminal 启动验证）。
+Units 3–6 manual verification: Not yet manually verified in a real browser (due to agent sandbox restrictions). Code and automated tests pass.
 
-## 已实现
+## Completed Features
 
-- 建立静态、零外部依赖项目，可用于本地运行与 GitHub Pages。
-- 单元 1 四个任务：`pwd`、`ls`、进入课程目录、返回上级并用 `pwd` 确认。
-- 结构化虚拟文件系统和路径解析：绝对/相对路径、`.`, `..`, `~`、引号、带空格路径。
-- 命令：`pwd`、`ls`、`cd`、`help`、`clear`；未支持语法会报错。
-- 终端显示修复：执行 `clear` 命令与 Ctrl+L 均可真正清空终端文本，且保留当前目录、虚拟文件与学习进度。
-- 命令历史、三级提示、任务判定、目录树、重置本关。
-- localStorage 进度恢复、损坏/旧版本降级、存储不可用提示。
-- 真实 Mac Terminal 迁移卡，复制只复制命令，不执行命令。
-- 针对输入故障的修复：输入框增加明确提示和初始化聚焦；点击终端输入行会聚焦输入框。
-- 单元 2：`mkdir`、`touch`、`cp`、`mv` 基础子集，独立初始环境、拒绝覆盖和错误状态保持。
-- 单元 2 四个任务及单元切换；当前任务显示“第 X / 4 题”，完成数量单独显示。
-- 进度存储兼容已有数据，并保存当前虚拟文件系统，刷新后可恢复已执行的状态。
-- 单元 3：`cat`、字面 `grep`、`grep -i`、`wc -l` 和有限管道 `grep ... | wc -l`。
-- 单元 3 四个独立任务及确定性课程文本/日志，支持参数带引号。
-- 单元 4「排错与独立挑战」：4 个递进任务及对应虚拟文件系统模式（`unit4-open`, `unit4-rename`, `unit4-log`, `unit4-organize`）。
-  - 任务 1「我为什么打不开文件？」：路径排错，支持相对路径、绝对路径、先 cd 再读取等等价解法。
-  - 任务 2「更正拼写错误的文件名」：文件重命名，使用 mv 更正文件名，防覆盖保护。
-  - 任务 3「从记录里找线索」：日志排错与管道统计，过滤 WARN 告警行数并用 wc -l 统计。
-  - 任务 4「独立整理课程工作区」：综合运用 ls、mkdir、cp、mv 整理 starter 目录，基于最终文件系统状态判定，保留原件与说明文件，无需 rm。
-- 单元 5「输出、日志与自动化」：新增 `echo`、输出重定向 `>` 与 `>>`、专用教学命令 `run`。
-  - `echo`：支持普通文本、成对单双引号，带空格参数包裹，未闭合引号报错，不做变量或转义扩展。
-  - `>` 与 `>>`：支持 `echo 文本 [>|>>] 文件` 与 `cat 文件 [>|>>] 文件`；`>` 为覆盖写入，`>>` 为追加写入；目标父目录不存在或目标为目录时报错；命令失败时不修改目标文件；错误信息不重定向至文件。
-  - `run 脚本文件`：本网站专用教学命令，非系统通用 Shell；按顺序执行文件中的命令清单；自动忽略空行与以 `#` 开头的整行注释；遇第一处错误立即停止并报告出错行号及原因；保留前序已执行的修改；严禁嵌套或递归执行 `run`；设置 10KB 大小与 50 行上限。
-  - 任务 1「让终端输出一句话」：使用 echo 打印欢迎语，支持不同引号写法。
-  - 任务 2「把输出保存成日志」：使用 > 将开课信息写入 logs/session.log，并用 cat 读取确认。
-  - 任务 3「追加记录，不丢失旧内容」：使用 >> 追加两条设备状态，保留原开课记录，误用 > 会导致判定失败。
-  - 任务 4「运行第一份自动化清单」：cat 阅读预设清单 scripts/start-class.txt，使用 run 一键执行，重复运行依然保证幂等结构。
-- 单元 6「读懂命令与查找帮助」：
-  - 完善 `help` 与 `help <命令名>`：支持查询当前模拟器支持的全部 14 个命令的具体语法、功能说明与能力限制（`run` 明确标注为网站专用教学命令）。
-  - 任务 1「看懂命令的三个部分」：区分命令名（`grep`）、选项（`-i`）和参数（`"Course Notes.txt"`），支持单双引号包裹带空格文件名，基于执行事件与匹配结果综合判定。
-  - 任务 2「进入名字带空格的目录」：使用引号包裹进入 `Summer Camp` 目录，用 `pwd` 验证所在位置，用 `cat overview.txt` 读取说明；非法 `cd` 保持原工作目录。
-  - 任务 3「不会用时，先查帮助」：先运行 `help wc` 阅读命令帮助与限制，再使用 `wc -l notes.txt` 统计行数。
-  - 任务 4「读懂错误，再修正」：分析初学者 `cd lessons pwd` 复合连写报错原因，分步执行 `cd lessons` ➔ `pwd` ➔ `cat course-overview.txt`；支持直接正确完成。
-- 界面学习地图导航：单元 1～6 均可自由切换与平滑推进，单元 5 完成后提供“进入单元 6”明确入口。
-- 路线图扩展：完整展示 12 个单元路线，单元 7～12 标注为规划中。
-- GitHub Pages 部署兼容性：全项目使用纯相对路径（`./styles.css`、`./src/app.js`），无本机绝对路径，无外部/网络硬编码，支持独立项目子路径（如 `/terminal-steps-lab/`）；`localStorage` 使用专属键名 `terminal-steps-lab:progress` 避免与同域名下其他项目意外发生键名冲突，且重置操作不调用 `localStorage.clear()` 清除整个域名数据（属于键名防冲突，非安全沙箱隔离）。
+- Static, zero-dependency web app for local use and GitHub Pages.
+- Unit 1 (4 tasks): `pwd`, `ls`, enter course folder, return to parent with `pwd` check.
+- Virtual filesystem and path parsing: absolute/relative paths, `.`, `..`, `~`, quotes, and paths with spaces.
+- Commands: `pwd`, `ls`, `cd`, `help`, `clear`. Unsupported commands show helpful error messages.
+- Screen clearing: `clear` command and `Ctrl+L` clear terminal text without resetting cwd or files.
+- Command history, 3-level hints, task evaluation, folder tree, and Reset Task.
+- `localStorage` progress saving with version check and storage failure warning.
+- Real Mac Terminal practice card with safe copy-to-clipboard button.
+- Clear input hints and automatic focus.
+- Unit 2 (4 tasks): `mkdir`, `touch`, `cp`, `mv` safe basics with overwrite protection.
+- Unit 3 (4 tasks): `cat`, literal `grep`, `grep -i`, `wc -l`, and pipes like `grep ... | wc -l`.
+- Unit 4 "Troubleshoot and Independent Challenge" (4 tasks):
+  - Task 1: "Why Can I Not Open the File?" (path troubleshooting).
+  - Task 2: "Fix a Misspelled File Name" (rename with mv, overwrite protection).
+  - Task 3: "Find Clues in Log Files" (log filtering and pipe count).
+  - Task 4: "Organize Your Workspace Independently" (starter folder cleanup).
+- Unit 5 "Output, Logs, and Automation" (4 tasks):
+  - `echo` prints text to the screen.
+  - `>` writes/overwrites into a file; `>>` appends to a file.
+  - `run` executes command checklists one by one (special teaching command in this lab).
+  - Task 1: "Print a Message to the Terminal".
+  - Task 2: "Save Output into a Log File".
+  - Task 3: "Append Records Without Losing Old Data".
+  - Task 4: "Run Your First Automation Checklist".
+- Unit 6 "Command Structure and Help" (4 tasks):
+  - `help` and `help <command>` documentation for all 14 commands.
+  - Task 1: "Understand the Three Command Parts" (`grep -i python "Course Notes.txt"`).
+  - Task 2: "Enter a Folder Name with Spaces" (`cd "Summer Camp"`).
+  - Task 3: "When in Doubt, Check Help" (`help wc` then `wc -l notes.txt`).
+  - Task 4: "Read the Error, Then Fix It" (composite command error `cd lessons pwd` fixed step by step).
+- Learning map navigation: free switching across Units 1–6.
+- Course roadmap: shows all 12 units (Units 1–6 Ready, Units 7–12 Planned).
+- GitHub Pages compatibility: relative paths (`./styles.css`, `./src/app.js`), no hardcoded hostnames, subpath safe.
+- Storage isolation: `terminal-steps-lab:progress` key used in `localStorage`. Reset only deletes this key.
 
-## 自动测试通过
+## Automated Tests Status
 
-- `node tests/test.mjs`：全部通过；输出为“全部测试通过：路径解析、命令边界、防覆盖保护、单元 1～6 全部 24 个任务判定与自动化执行。”
-- `node tests/test.mjs` 覆盖：
-  - 路径解析、相对路径、`.`、`..`、`~`、空格与引号
-  - 错误命令与错误路径下状态不变性（目录与文件系统保持不变）
-  - UI 契约检查（输入框存在、未禁用、含 placeholder、防缓存头、完整 12 单元路线预览、单元 6 可进入且单元 7～12 规划中）
-  - `mkdir`、`touch`、`cp`、`mv` 成功路径与防覆盖失败路径
-  - `cat`、字面 `grep`、`grep -i`、`wc -l`、有限管道 `grep ... | wc -l`
-  - 单元 1～4 全部任务与等价解法
-  - `echo` 普通文本、单双引号、空文本、未闭合引号、引号内特殊字符
-  - `>` 新建文件、覆盖已有内容、父目录不存在报错、目标为目录报错、缺少目标报错、不支持源命令报错、左侧失败不创建文件
-  - `>>` 追加内容、追加至不存在文件自动创建
-  - `run` 正常执行、跳过空行与注释、文件不存在、中途失败立即停止并报行号、前序保留、禁止嵌套 run、行数上限、多次运行幂等验证
-  - 单元 5 全部 4 个任务的判定机制与错误防御
-  - `help` 全局概览与 `help <命令名>` 针对性语法文档、限制提示、错误参数拦截
-  - 单元 6 全部 4 个任务的判定机制、等价解法（单双引号、不同参数位置）、空格目录跳转失败不改变路径、分步错误修正与直接正确解法支持
-- `node --check src/app.js && node --check src/engine.js && node --check src/filesystem.js && node --check src/data.js`：通过，无语法错误。
+- `node tests/test.mjs`: All pass. Output: `All tests passed: path parsing, command boundaries, overwrite protection, and all 24 tasks across Units 1-6.`
+- `node --check src/app.js && node --check src/engine.js && node --check src/filesystem.js && node --check src/data.js`: Pass with 0 errors.
 
-## 尚未验证或尚未完成
+## Unverified or Pending Items
 
-- 单元 3、4、5、6 浏览器人工交互：未进行真实浏览器验收（本环境受沙箱安全限制无法运行浏览器自动化，全部代码与单元测试通过，由用户在宿主 Mac 本地验收）。
-- 单元 2 极端输入后的重置与刷新边角行为：尚未由用户完整人工确认。
-- 单元 7～12：规划中（07 查找文件与批量选择、08 组合命令与处理失败、09 运行中的程序与操作安全、10 从清单到脚本、11 Python 项目工作流、12 Git 与 AI CLI 工作流）。
-- 用户本地服务器实际启动：尚未由本代理验证（代理环境受安全限制无法监听端口）。
+- Units 3, 4, 5, 6 browser manual verification: not yet tested in a real browser by the user.
+- Corner cases for Unit 2 reset and reload after extreme input: awaiting full manual confirmation.
+- Legacy save state verification: Storage key, task IDs, and fallback check strings are preserved in code. Only the automated test cases actually executed have been verified. Arbitrary legacy browser save states with older Chinese virtual files have not been exhaustively tested across all 24 tasks in a real browser. Existing user progress is not cleared or overwritten.
+- Units 7–12: in planning (07 Find Files and Batch Select, 08 Combine Commands and Handle Errors, 09 Running Programs and Safe Practice, 10 From Lists to Scripts, 11 Python Project Workflow, 12 Git and AI CLI Workflow).
 
-## 启动与测试命令
+## Run and Test Commands
 
-本地服务启动方式：
+Start local preview server:
 ```sh
 cd ~/terminal-steps-lab
 python3 -m http.server 4173 --bind 127.0.0.1
 ```
-浏览器访问：`http://127.0.0.1:4173/`。停止方法：在终端按 `Ctrl-C`。
+Open `http://127.0.0.1:4173/` in your browser. Stop with `Ctrl+C`.
 
-自动测试运行方式：
+Run automated tests:
 ```sh
 cd ~/terminal-steps-lab
 node tests/test.mjs
 ```
 
-## 用户本地人工验收清单
+## User Manual Verification Checklist
 
-### 第一阶段（单元 1）
-1. 初始任务运行 `pwd`，输出 `/home/steven`，任务完成。
-2. 任务 2 运行 `ls`，看到 `lessons` 和 `projects`，任务完成。
-3. 任务 3 运行 `cd lessons`（或 `cd ./lessons`），目录树和提示符同步。
-4. 任务 4 先运行 `cd ..`，再运行 `pwd`，不能只靠初始状态完成。
-5. 运行 `clear`，确认只清空终端输出，不改变当前所在目录或任务。
+### Unit 1
+1. Run `pwd`, output is `/home/steven`, task completes.
+2. Run `ls`, see `lessons` and `projects`, task completes.
+3. Run `cd lessons`, folder tree and prompt update.
+4. Run `cd ..` first, then run `pwd`, task completes.
+5. Run `clear`, terminal clears, current folder and files stay intact.
 
-### 第二阶段（单元 2）
-1. 任务 1：`mkdir projects/summer-camp` 后目录树出现新目录。
-2. 任务 2：`touch session-record.txt` 后出现空文件。
-3. 任务 3：`cp course-template.md robotics` 后目标文件出现，源文件仍在。
-4. 任务 4：`mv session-record.md archive/robotics-session-final.md` 后原路径消失，目标文件内容保留。
-5. 测试已有目标覆盖：例如重复创建已存在文件或目录，应明确提示拒绝覆盖且文件系统不被破坏。
+### Unit 2
+1. Task 1: `mkdir projects/summer-camp` creates folder in tree.
+2. Task 2: `touch session-record.txt` creates empty file.
+3. Task 3: `cp course-template.md robotics` copies file while keeping original.
+4. Task 4: `mv session-record.md archive/robotics-session-final.md` moves and renames.
+5. Overwrite test: repeated file/folder creation is safely rejected.
 
-### 第三阶段（单元 3）
-1. 任务 1：`cat course-overview.txt`；确认原文显示，文件未被修改。
-2. 任务 2：`grep robotics keyword-notes.txt`；确认返回两行完整内容。
-3. 任务 3：先运行 `grep python case-notes.txt`，再运行 `grep -i python case-notes.txt`；确认第二次包含三种大小写。
-4. 任务 4：`grep ERROR logs/lesson-run.log | wc -l`；确认输出 `3`。
+### Unit 3
+1. Task 1: `cat course-overview.txt` displays text, file unchanged.
+2. Task 2: `grep robotics keyword-notes.txt` returns 2 matching lines.
+3. Task 3: Run `grep python case-notes.txt`, then `grep -i python case-notes.txt`. Second run finds 3 lines.
+4. Task 4: `grep ERROR logs/lesson-run.log | wc -l` outputs `3`.
 
-### 第四阶段（单元 4）
-1. 任务 1（我为什么打不开文件？）：
-   - 处于 `/home/steven` 时，直接输入 `cat course-overview.txt`，应提示文件不存在。
-   - 输入 `cat lessons/course-overview.txt`（或先 `cd lessons` 再 `cat course-overview.txt`），成功读取文件并完成任务。
-2. 任务 2（更正拼写错误的文件名）：
-   - 处于 `/home/steven/lessons/robotics`，运行 `ls` 看到 `session-reocrd.md`。
-   - 运行 `mv session-reocrd.md session-record.md`，目录树中拼写更正，任务完成。
-3. 任务 3（从记录里找线索）：
-   - 处于 `/home/steven/lessons`，运行 `grep WARN logs/hardware-check.log | wc -l`，输出 `3`，任务完成。
-   - 也可先 `cd logs` 再运行 `grep WARN hardware-check.log | wc -l`，同样判定完成。
-4. 任务 4（独立整理课程工作区）：
-   - 处于 `/home/steven/projects/starter`，运行 `ls` 和 `cat readme.txt` 查看指引。
-   - 依次创建目录：`mkdir docs`、`mkdir records`。
-   - 复制模板：`cp template.md docs/`（确认原 `template.md` 还在）。
-   - 移动草稿：`mv notes-draft.txt records/lesson-01.txt`（确认原草稿消失，目标出现）。
-   - 任务自动判定完成，点击“下一题”进入单元 5。
+### Unit 4
+1. Task 1 (Why Can I Not Open the File?):
+   - At `/home/steven`, type `cat course-overview.txt`. Fails with "No such file".
+   - Type `cat lessons/course-overview.txt` (or `cd lessons` then `cat course-overview.txt`). Task completes.
+2. Task 2 (Fix a Misspelled File Name):
+   - At `/home/steven/lessons/robotics`, run `ls` to spot `session-reocrd.md`.
+   - Run `mv session-reocrd.md session-record.md`. Tree updates, task completes.
+3. Task 3 (Find Clues in Log Files):
+   - At `/home/steven/lessons`, run `grep WARN logs/hardware-check.log | wc -l`. Outputs `3`, task completes.
+4. Task 4 (Organize Your Workspace Independently):
+   - At `/home/steven/projects/starter`, run `ls` and `cat readme.txt`.
+   - Run `mkdir docs` and `mkdir records`.
+   - Run `cp template.md docs/` (original remains).
+   - Run `mv notes-draft.txt records/lesson-01.txt` (draft moved).
+   - Task completes. Click Next to go to Unit 5.
 
-### 第五阶段（单元 5）
-1. 任务 1（让终端输出一句话）：
-   - 输入 `echo "Welcome to STEM Lab"`（或使用单引号），终端打印出欢迎语，任务完成。
-   - 负向测试：输入 `echo "wrong text"`，虽然命令正常输出，但任务判定不会通过。
-2. 任务 2（把输出保存成日志）：
-   - 输入 `echo "Lesson started" > logs/session.log`，目录树中出现 `logs/session.log` 文件。
-   - 输入 `cat logs/session.log`，终端打印出 `Lesson started`，任务判定完成。
-3. 任务 3（追加记录，不丢失旧内容）：
-   - 首次进入该任务时，`logs/session.log` 已预置存在，且内容为 `Lesson started`（各任务环境独立，不依赖任务 2）。
-   - 正常操作：依次运行 `echo "Device check: OK" >> logs/session.log` 与 `echo "Network connected" >> logs/session.log`，任务判定完成。
-   - 误用 > 防御与恢复验证：
-     - 若误输入 `echo "Device check: OK" > logs/session.log`，会导致原有的第一行 `Lesson started` 丢失，任务不会通过；
-     - 恢复方式 A：点击“重置本关”，文件系统立即恢复初始状态，再次使用 `>>` 即可正常完成；
-     - 恢复方式 B：无需点击重置，通过合法命令重新写入第一行 `echo "Lesson started" > logs/session.log` 并依次追加后续两行，任务同样会判定通过，绝不存在“曾经犯错便永久锁死”的情况。
-4. 任务 4（运行第一份自动化清单）：
-   - 界面明确说明 `run` 是本网站专用的教学命令，非通用系统 Shell。
-   - 先运行 `cat scripts/start-class.txt` 查看清单中的命令与注释。
-   - 运行 `run scripts/start-class.txt`，终端显示逐行执行结果，任务判定完成。
-   - 重复执行检查：再次运行 `run scripts/start-class.txt`，用 `cat logs/session.log` 验证日志行数依然保持预期的 2 行。
-     - 教学解释：这是因为该示例脚本第一行使用 `>` 重新写入开课记录，后续行使用 `>>` 追加；并不是所有命令清单重复运行都会得到相同结果。
+### Unit 5
+1. Task 1 (Print a Message to the Terminal):
+   - Type `echo "Welcome to STEM Lab"`. Prints welcome text, task completes.
+   - Negative test: Type `echo "wrong text"`. Command succeeds, but task does not complete.
+2. Task 2 (Save Output into a Log File):
+   - Type `echo "Lesson started" > logs/session.log`. File appears in tree.
+   - Type `cat logs/session.log`. Prints text, task completes.
+3. Task 3 (Append Records Without Losing Old Data):
+   - Initial state: `logs/session.log` has `Lesson started`.
+   - Run `echo "Device check: OK" >> logs/session.log`.
+   - Run `echo "Network connected" >> logs/session.log`. Task completes.
+   - Accidental `>` recovery test:
+     - If you run `echo "Device check: OK" > logs/session.log`, line 1 is lost and task fails.
+     - Recovery A: Click Reset Task to restore original file.
+     - Recovery B: Re-run `echo "Lesson started" > logs/session.log`, then append both lines. Task passes without locking.
+4. Task 4 (Run Your First Automation Checklist):
+   - First run `cat scripts/start-class.txt` to view commands.
+   - Run `run scripts/start-class.txt`. Commands execute in order, task completes.
+   - Repeat test: Run `run scripts/start-class.txt` again. `cat logs/session.log` still shows exactly 2 lines.
 
-### 第六阶段（单元 6）
-1. 任务 1（看懂命令的三个部分）：
-   - 处于 `/home/steven`，输入 `grep -i python "Course Notes.txt"`（或使用单引号 `'Course Notes.txt'`）。
-   - 观察终端输出 2 行匹配结果，任务判定完成。
-   - 负向/结构测试：输入不带引号的 `grep -i python Course Notes.txt` 报参数错误；输入不带 `-i` 的 `grep python "Course Notes.txt"` 仅输出 1 行，任务不通过。
-2. 任务 2（进入名字带空格的目录）：
-   - 处于 `/home/steven/lessons`，先测试直接输入 `cd Summer Camp`，终端报错拒绝且当前路径保持不变。
-   - 输入 `cd "Summer Camp"`（或单引号 `'Summer Camp'`），提示符与目录树同步显示进入目标目录。
-   - 运行 `pwd` 验证绝对路径，再运行 `cat overview.txt` 读取内容，任务判定完成。
-3. 任务 3（不会用时，先查帮助）：
-   - 处于 `/home/steven`，先直接运行 `wc -l notes.txt`，虽然输出了 `4`，但由于未先查阅帮助，任务不会判定完成。
-   - 运行 `help wc`，终端打印 `wc` 的专门语法文档和 `-l` 选项限制说明。
-   - 此时再次输入 `wc -l notes.txt`，任务判定完成。
-4. 任务 4（读懂错误，再修正）：
-   - 处于 `/home/steven`，输入复合连写命令 `cd lessons pwd`，观察错误提示“cd：本阶段只接受一个目录路径参数”且路径保持为 `/home/steven`。
-   - 分步执行正确操作：输入 `cd lessons`，再输入 `pwd` 确认进入，最后输入 `cat course-overview.txt` 阅读说明，任务完成。
-   - 容错验证：若不输入复合错误命令，直接按分步正确操作完成，同样能够顺利判定通过。
+### Unit 6
+1. Task 1 (Understand the Three Command Parts):
+   - At `/home/steven`, run `grep -i python "Course Notes.txt"`.
+   - Matches 2 lines, task completes.
+   - Negative test: Unquoted `grep -i python Course Notes.txt` fails argument check. Without `-i`, only 1 line matches.
+2. Task 2 (Enter a Folder Name with Spaces):
+   - At `/home/steven/lessons`, type `cd Summer Camp` without quotes. Fails safely, cwd stays unchanged.
+   - Type `cd "Summer Camp"`. Successfully enters folder.
+   - Run `pwd` to verify, then `cat overview.txt` to read details. Task completes.
+3. Task 3 (When in Doubt, Check Help):
+   - At `/home/steven`, run `wc -l notes.txt` directly. Outputs `4`, but task is not complete because `help wc` was not run.
+   - Run `help wc` to read usage and limits.
+   - Now run `wc -l notes.txt`. Task completes.
+4. Task 4 (Read the Error, Then Fix It):
+   - At `/home/steven`, type `cd lessons pwd`. Observe error and see cwd is still `/home/steven`.
+   - Run step by step: `cd lessons`, then `pwd`, then `cat course-overview.txt`. Task completes.
+   - Direct completion test: Running the correct steps without the error first also passes.
 
-## 下一步工作
+## Next Steps
 
-等待用户完成单元 3、4、5、6 的本地浏览器人工验收。验收通过后，可根据整体路线图规划单元 7「查找文件与批量选择」。
-
+Complete manual verification in browser for Units 3–6. Once verified, plan Unit 7 "Find Files and Batch Select".

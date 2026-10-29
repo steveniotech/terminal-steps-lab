@@ -1,55 +1,74 @@
 # Terminal Steps Lab
 
-看懂命令，亲手操作，安全自动化。
+Read commands. Practice safely. Learn by doing.
 
-这是一个浏览器内的终端学习环境，面向正在学习 Terminal、CLI、Python、Git 和 AI 编程工具的成年人。所有命令只作用于网页中的虚拟文件系统，不会读取或修改电脑上的真实文件。
+This is an in-browser terminal practice lab. It is made for learners who are getting started with Terminal, command-line tools, Python, Git, and AI coding tools. All commands run in a simulated virtual filesystem inside your browser. They never read or change real files on your computer.
 
-## 当前范围
+## Current Scope
 
-- 单元 1「我在哪里」的四个任务
-- `pwd`、`ls`、`cd`、`help`、`clear`
-- 相对/绝对路径、`.`, `..`, `~`、引号和带空格的路径
-- 命令历史、三级提示、虚拟目录树、任务判定、重置本关
-- 当前浏览器的 `localStorage` 进度保存
-- 真实 Mac Terminal 迁移练习卡
-- 单元 2「建立课程工作区」：`mkdir`、`touch`、`cp`、`mv` 的安全基础子集
-- 单元 2 的四个独立任务：创建课程目录、创建记录文件、复制教案模板、移动并重命名课程记录
-- 单元 3「阅读与搜索」：`cat`、`grep`、`grep -i`、`wc -l` 和有限范围的 `grep ... | wc -l`
-- 单元 4「排错与独立挑战」：综合运用已学命令排查路径报错、更正文件名、分析硬件日志与独立整理工作区
-- 单元 5「输出、日志与自动化」：`echo` 终端输出、`>` 覆盖写入与 `>>` 追加日志，以及专用教学命令 `run` 执行命令清单
-- 单元 6「读懂命令与查找帮助」：拆解命令结构（命令名、选项、参数）、带空格路径的引号处理、`help [命令名]` 精确查阅帮助与限制说明、复合连写报错分析与分步修正
+- **Unit 1: Where Am I** (4 tasks)
+  - `pwd`, `ls`, `cd`, `help`, `clear`
+  - Relative and absolute paths, `.`, `..`, `~`, quotes, and paths with spaces
+  - Command history, 3-level hints, folder tree view, task evaluation, Reset Task
+  - Progress saved in your browser with `localStorage`
+  - Real Mac Terminal practice card
+- **Unit 2: Set Up Workspace** (4 tasks)
+  - Safe basics for `mkdir`, `touch`, `cp`, and `mv`
+  - Create course folders, create notes files, copy templates safely, move and rename files
+- **Unit 3: Read and Search** (4 tasks)
+  - `cat`, `grep`, `grep -i`, `wc -l`, and pipes like `grep ... | wc -l`
+- **Unit 4: Troubleshoot and Independent Challenge** (4 tasks)
+  - Fix path mistakes, fix misspelled file names, read hardware logs, and organize your workspace independently
+- **Unit 5: Output, Logs, and Automation** (4 tasks)
+  - Print text with `echo`, write logs with `>`, append logs with `>>`, and run command checklists with `run`
+- **Unit 6: Command Structure and Help** (4 tasks)
+  - Understand the 3 command parts (command, options, arguments)
+  - Quote paths with spaces
+  - Look up syntax and limits with `help <command>`
+  - Read composite command errors and run steps one by one
 
-本阶段命令边界：`help` 支持直接输入全局概览或 `help <命令名>` 查询具体用法；`cat` 不支持多个文件拼接；`grep` 是字面文本搜索子集，不实现正则表达式，仅支持可选 `-i`；`wc` 仅支持 `wc -l 文件`；管道仅支持 `grep [-i] 关键词 文件 | wc -l`；重定向支持 `echo 文本 [>|>>] 文件` 与 `cat 文件 [>|>>] 文件`（`>` 覆盖写入，`>>` 追加写入，失败时不破坏目标文件）；`run` 是本教学模拟器专用命令，用于按顺序执行命令清单，不支持循环、变量、后台任务或嵌套 `run`。仍不支持 `mkdir -p`、目录递归复制、目录移动、多个源文件、通配符、多命令连接（如 `&&`、`;`）。`touch` 不模拟时间戳；拒绝覆盖是 `cp`/`mv` 的保护规则。查找文件、组合命令、运行中程序、Python、Git 与 AI CLI 为后续规划单元内容。
+### Current Command Limits
 
-## 本地运行
+- `help`: Type `help` for a list of commands, or `help <command>` for details.
+- `cat`: Reads one file at a time. It cannot join multiple files.
+- `grep`: Searches exact text. Regular expressions are not supported. Only the `-i` option is supported.
+- `wc`: Only supports `wc -l file_path`.
+- Pipes (`|`): Only supports `grep [-i] keyword file | wc -l`.
+- Redirection: Supports `echo text [>|>>] file` and `cat file [>|>>] file`. `>` overwrites, `>>` appends.
+- `run`: A special teaching command in this lab. It runs commands in a file one by one. It does not support loops, variables, background tasks, or nested `run` calls.
+- Protection rules: `cp` and `mv` refuse to overwrite existing files. `mkdir -p`, folder copy, folder move, and wildcards (`*`) are not supported in this stage.
 
-无需安装依赖。为了让 ES modules 正常工作，在项目目录运行本地 HTTP 服务：
+## Run Locally
+
+You do not need to install packages or dependencies. To run ES modules in your browser, start a simple HTTP server:
 
 ```sh
 cd ~/terminal-steps-lab
 python3 -m http.server 4173 --bind 127.0.0.1
 ```
 
-然后打开本地浏览器访问 `http://127.0.0.1:4173/`。停止方法：在运行服务器的终端按 `Ctrl-C`。
+Then open `http://127.0.0.1:4173/` in your browser.
+To stop the server: Press `Ctrl+C` in your terminal.
 
-## GitHub Pages 发布说明
+## GitHub Pages Deployment
 
-本项目为零构建、零运行依赖的原生纯静态前端项目，天然兼容静态站点托管平台：
+This project uses plain HTML, CSS, and JavaScript. It does not need a build step.
 
-- **托管方式**：可直接推送到独立的 GitHub 仓库，在仓库 Settings ➔ Pages 中，将 Build and deployment 的 Source 设置为 `Deploy from a branch`，分支选择 `main`，目录选择 `/ (root)`。
-- **子路径兼容**：所有 CSS、JavaScript 模块及资源引用均采用相对路径（`./` 开头），完全支持 GitHub Pages 项目子路径环境（例如 `https://<用户名>.github.io/<项目名>/`）。
-- **进度存储说明**：学习进度使用专属键 `terminal-steps-lab:progress` 存储在当前访问者的 `localStorage` 中。使用独立键名可避免与同域名下其他项目意外发生键名冲突，且重置操作仅重置本项目的存储数据，绝不调用 `localStorage.clear()` 误清整个域名的数据。注意：这属于键名区分以避免冲突，并非不同项目之间的安全隔离机制；进度仅保存在当前浏览器，不自动跨设备或跨浏览器同步。
+- **Hosting**: Push to a GitHub repository. In Settings -> Pages, set Source to `Deploy from a branch`, choose branch `main`, and folder `/ (root)`.
+- **Subpath support**: All CSS, JavaScript, and asset links use relative paths (`./`). The site works in GitHub Pages project subpaths (such as `https://<user>.github.io/<repo>/`).
+- **Progress storage**: Progress is stored in `localStorage` under the key `terminal-steps-lab:progress`. This prevents conflicts with other projects on the same domain. Resetting only clears this project's key. It never calls `localStorage.clear()`.
 
-## 测试
+## Tests
+
+Run the test suite with Node.js:
 
 ```sh
 cd ~/terminal-steps-lab
 node tests/test.mjs
 ```
 
-测试覆盖路径解析、命令边界、防覆盖保护、单元 1～6 全部 24 个任务判定、部署路径契约及存储命名空间隔离；真实浏览器交互可按 `PROJECT_STATUS.md` 中的清单在浏览器中核验。
+The tests verify path parsing, command boundaries, overwrite protection, all 24 tasks across Units 1–6, deployment path contracts, and storage isolation.
 
-## 安全边界
+## Security Boundaries
 
-输入不会经过 `eval` 或 `new Function`，也不会调用真实 shell。终端输出通过 DOM 文本节点渲染，用户输入不会作为 HTML 执行。
-
+User input is never passed to `eval` or `new Function`. It never talks to a real shell. Output is rendered through DOM text nodes so input is never executed as HTML.

@@ -32,24 +32,24 @@ const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 assert.match(html, /<form id="terminal-form"/);
 assert.match(html, /<input id="command-input"[^>]*autofocus/);
 assert.doesNotMatch(html, /<input id="command-input"[^>]*disabled/);
-assert.match(html, /placeholder="输入 pwd，然后按 Enter"/);
+assert.match(html, /placeholder="Type pwd, then press Enter"/);
 assert.match(html, /<div id="unit-tabs"/);
-assert.match(html, /02 建立课程工作区 · 可进入/);
-assert.match(html, /03 阅读与搜索 · 可进入/);
-assert.match(html, /04 排错与独立挑战 · 可进入/);
-assert.match(html, /05 输出、日志与自动化 · 可进入/);
-assert.match(html, /06 读懂命令与查找帮助 · 可进入/);
-assert.match(html, /07 查找文件与批量选择 · 规划中/);
-assert.match(html, /12 Git 与 AI CLI 工作流 · 规划中/);
+assert.match(html, /02 Set Up Workspace · Ready/);
+assert.match(html, /03 Read and Search · Ready/);
+assert.match(html, /04 Troubleshoot and Challenge · Ready/);
+assert.match(html, /05 Output, Logs and Automation · Ready/);
+assert.match(html, /06 Command Structure and Help · Ready/);
+assert.match(html, /07 Find Files and Batch Select · Planned/);
+assert.match(html, /12 Git and AI CLI Workflow · Planned/);
 assert.match(html, /Cache-Control/);
-assert.doesNotMatch(html, /(href|src)=["']\/(?!\/)/, '不能使用以 / 开头的绝对根路径，确保支持 GitHub Pages 项目子路径部署');
-assert.doesNotMatch(html, /localhost|127\.0\.0\.1/, '页面不应包含本地开发服务器地址');
+assert.doesNotMatch(html, /(href|src)=["']\/(?!\/)/, 'Do not use root-relative paths starting with /, ensuring support for GitHub Pages project subpath deployment');
+assert.doesNotMatch(html, /localhost|127\.0\.0\.1/, 'Page should not contain local dev server addresses');
 assert.match(html, /href=["']\.\/styles\.css/);
 assert.match(html, /src=["']\.\/src\/app\.js/);
 
 const appJs = await readFile(new URL('../src/app.js', import.meta.url), 'utf8');
-assert.match(appJs, /STORAGE_KEY\s*=\s*['"]terminal-steps-lab:/, 'localStorage 必须使用 terminal-steps-lab 专属命名空间');
-assert.doesNotMatch(appJs, /localStorage\.clear\(\)/, '不得使用 localStorage.clear() 清除整个域名的数据');
+assert.match(appJs, /STORAGE_KEY\s*=\s*['"]terminal-steps-lab:/, 'localStorage must use terminal-steps-lab dedicated namespace');
+assert.doesNotMatch(appJs, /localStorage\.clear\(\)/, 'Do not use localStorage.clear() to wipe out origin data');
 
 assert.equal(units.length, 6);
 assert.deepEqual(units.map(u => u.id), ['unit1', 'unit2', 'unit3', 'unit4', 'unit5', 'unit6']);
@@ -105,7 +105,7 @@ assert.equal(executeCommand('cat', fsState).ok, false); assert.equal(executeComm
 assert.equal(executeCommand('cat course-overview.txt other.txt', fsState).ok, false);
 fsState = { root: createUnit3FileSystem('grep'), cwd: `${HOME}/lessons`, successfulCommands: [] };
 let grepResult = executeCommand('grep robotics keyword-notes.txt', fsState);
-assert.equal(grepResult.ok, true); assert.equal(grepResult.matchedLines.length, 2); assert.equal(grepResult.output, 'robotics 课程需要先确认材料。\nrobotics 课程结束后记录观察。');
+assert.equal(grepResult.ok, true); assert.equal(grepResult.matchedLines.length, 2); assert.equal(grepResult.output, 'robotics lessons require checking materials first.\nrobotics notes are saved after class.');
 assert.equal(executeCommand('grep ROBOTICS keyword-notes.txt', fsState).output, '');
 assert.equal(executeCommand('grep -i ROBOTICS keyword-notes.txt', fsState).matchedLines.length, 2);
 assert.equal(executeCommand('grep "robotics|python" keyword-notes.txt', fsState).output, '');
@@ -179,21 +179,21 @@ assert.equal(tasks[2].check({ command: 'cd ./lessons', result: enter, state: t }
 assert.equal(tasks[3].check({ command: 'pwd', result: { ok: true, output: HOME }, state: { cwd: HOME, successfulCommands: ['cd ..', 'pwd'] } }), true);
 assert.equal(tasks[3].check({ command: 'pwd', result: { ok: true, output: HOME }, state: { cwd: HOME, successfulCommands: ['pwd'] } }), false);
 
-// 单元 4 测试
-// 任务 1：我为什么打不开文件？
+// Unit 4 tests
+// Task 1: Why Can I Not Open the File?
 let u4t1State = { root: createUnit4FileSystem('open'), cwd: HOME, successfulCommands: [], output: [] };
 let failedCat = executeCommand('cat course-overview.txt', u4t1State);
 assert.equal(failedCat.ok, false);
 assert.equal(u4t1State.cwd, HOME);
 assert.equal(tasks[12].check({ state: u4t1State }), false);
 
-// 任务 1 解法 A：相对路径
+// Task 1 Solution A: relative path
 let successCatRel = executeCommand('cat lessons/course-overview.txt', u4t1State);
 assert.equal(successCatRel.ok, true);
 u4t1State.output.push({ command: 'cat lessons/course-overview.txt', ...successCatRel });
 assert.equal(tasks[12].check({ state: u4t1State }), true);
 
-// 任务 1 解法 B：先 cd 后 cat
+// Task 1 Solution B: cd first, then cat
 let u4t1Alt = { root: createUnit4FileSystem('open'), cwd: HOME, successfulCommands: [], output: [] };
 let cdRes = executeCommand('cd lessons', u4t1Alt);
 assert.equal(cdRes.ok, true); u4t1Alt.cwd = cdRes.output; u4t1Alt.successfulCommands.push('cd lessons');
@@ -201,7 +201,7 @@ let catRes = executeCommand('cat course-overview.txt', u4t1Alt);
 assert.equal(catRes.ok, true); u4t1Alt.output.push({ command: 'cat course-overview.txt', ...catRes });
 assert.equal(tasks[12].check({ state: u4t1Alt }), true);
 
-// 任务 2：文件名写错了
+// Task 2: Fix a Misspelled File Name
 let u4t2State = { root: createUnit4FileSystem('rename'), cwd: `${HOME}/lessons/robotics`, successfulCommands: [], output: [] };
 assert.equal(getNode(u4t2State.root, `${HOME}/lessons/robotics/session-reocrd.md`)?.type, 'file');
 assert.equal(getNode(u4t2State.root, `${HOME}/lessons/robotics/session-record.md`), null);
@@ -212,14 +212,14 @@ assert.equal(mvRes.ok, true);
 u4t2State.successfulCommands.push('mv session-reocrd.md session-record.md');
 assert.equal(tasks[13].check({ state: u4t2State }), true);
 assert.equal(getNode(u4t2State.root, `${HOME}/lessons/robotics/session-reocrd.md`), null);
-assert.equal(getNode(u4t2State.root, `${HOME}/lessons/robotics/session-record.md`)?.content.includes('机械臂初装'), true);
+assert.equal(getNode(u4t2State.root, `${HOME}/lessons/robotics/session-record.md`)?.content.includes('Robotic arm assembly'), true);
 
-// 任务 2 防覆盖保护测试
+// Task 2: overwrite protection test
 let beforeTree = JSON.stringify(u4t2State.root);
 assert.equal(executeCommand('mv session-record.md session-plan.md', u4t2State).ok, false);
 assert.equal(JSON.stringify(u4t2State.root), beforeTree);
 
-// 任务 3：从记录里找线索
+// Task 3: Find Clues in Log Files
 let u4t3State = { root: createUnit4FileSystem('log'), cwd: `${HOME}/lessons`, successfulCommands: [], output: [] };
 let wrongKeyword = executeCommand('grep ERROR logs/hardware-check.log | wc -l', u4t3State);
 assert.equal(wrongKeyword.ok, true);
@@ -233,7 +233,7 @@ assert.equal(rightKeyword.output, '3');
 u4t3State.output.push({ command: 'grep WARN logs/hardware-check.log | wc -l', ...rightKeyword });
 assert.equal(tasks[14].check({ state: u4t3State }), true);
 
-// 任务 3 等价解法：先 cd 进入 logs 目录
+// Task 3 Alternative Solution: cd into logs folder first
 let u4t3Alt = { root: createUnit4FileSystem('log'), cwd: `${HOME}/lessons/logs`, successfulCommands: [], output: [] };
 let pipeAlt = executeCommand('grep WARN hardware-check.log | wc -l', u4t3Alt);
 assert.equal(pipeAlt.ok, true);
@@ -241,31 +241,31 @@ assert.equal(pipeAlt.output, '3');
 u4t3Alt.output.push({ command: 'grep WARN hardware-check.log | wc -l', ...pipeAlt });
 assert.equal(tasks[14].check({ state: u4t3Alt }), true);
 
-// 任务 4：独立整理课程工作区
+// Task 4: Organize Workspace Independently
 let u4t4State = { root: createUnit4FileSystem('organize'), cwd: `${HOME}/projects/starter`, successfulCommands: [], output: [] };
 assert.equal(tasks[15].check({ state: u4t4State }), false);
 
-// 步骤 1：创建目录
+// Step 1: create directories
 assert.equal(executeCommand('mkdir docs', u4t4State).ok, true);
 assert.equal(executeCommand('mkdir records', u4t4State).ok, true);
 assert.equal(tasks[15].check({ state: u4t4State }), false);
 
-// 步骤 2：复制模板（保留原件）
+// Step 2: copy template (keep original)
 assert.equal(executeCommand('cp template.md docs/', u4t4State).ok, true);
 assert.equal(tasks[15].check({ state: u4t4State }), false);
 
-// 步骤 3：移动草稿并重命名
+// Step 3: move draft and rename
 assert.equal(executeCommand('mv notes-draft.txt records/lesson-01.txt', u4t4State).ok, true);
 assert.equal(tasks[15].check({ state: u4t4State }), true);
 
-// 确认最终文件系统状态
+// Verify final filesystem state
 assert.equal(getNode(u4t4State.root, `${HOME}/projects/starter/template.md`)?.type, 'file');
 assert.equal(getNode(u4t4State.root, `${HOME}/projects/starter/docs/template.md`)?.type, 'file');
 assert.equal(getNode(u4t4State.root, `${HOME}/projects/starter/notes-draft.txt`), null);
 assert.equal(getNode(u4t4State.root, `${HOME}/projects/starter/records/lesson-01.txt`)?.type, 'file');
 assert.equal(getNode(u4t4State.root, `${HOME}/projects/starter/readme.txt`)?.type, 'file');
 
-// 任务 4 乱序解法支持（先 records 后 docs，使用 cp template.md docs）
+// Task 4 out-of-order solution support
 let u4t4Alt = { root: createUnit4FileSystem('organize'), cwd: `${HOME}/projects/starter`, successfulCommands: [], output: [] };
 assert.equal(executeCommand('mkdir records', u4t4Alt).ok, true);
 assert.equal(executeCommand('mv notes-draft.txt records/lesson-01.txt', u4t4Alt).ok, true);
@@ -273,8 +273,8 @@ assert.equal(executeCommand('mkdir docs', u4t4Alt).ok, true);
 assert.equal(executeCommand('cp template.md docs', u4t4Alt).ok, true);
 assert.equal(tasks[15].check({ state: u4t4Alt }), true);
 
-// 单元 5 基础功能测试
-// 1. echo 命令
+// Unit 5 basic functionality tests
+// 1. echo command
 let u5State = { root: createUnit5FileSystem('echo'), cwd: HOME, successfulCommands: [], output: [] };
 assert.equal(executeCommand('echo hello', u5State).output, 'hello');
 assert.equal(executeCommand('echo "Hello STEM"', u5State).output, 'Hello STEM');
@@ -284,75 +284,75 @@ assert.equal(executeCommand('echo "unclosed quote', u5State).ok, false);
 assert.equal(executeCommand('echo "a > b"', u5State).output, 'a > b');
 assert.equal(executeCommand("echo 'a >> b'", u5State).output, 'a >> b');
 
-// 2. 输出重定向 > 与 >>
+// 2. Output redirection > and >>
 let redirState = { root: createUnit5FileSystem('redirect'), cwd: HOME, successfulCommands: [], output: [] };
-// 新建文件
+// Create new file
 let redir1 = executeCommand('echo "Lesson started" > logs/session.log', redirState);
 assert.equal(redir1.ok, true);
 assert.equal(getNode(redirState.root, `${HOME}/logs/session.log`)?.content, 'Lesson started\n');
 
-// 覆盖已有内容
+// Overwrite existing content
 let redir2 = executeCommand('echo "New header" > logs/session.log', redirState);
 assert.equal(redir2.ok, true);
 assert.equal(getNode(redirState.root, `${HOME}/logs/session.log`)?.content, 'New header\n');
 
-// 追加内容
+// Append content
 let redir3 = executeCommand('echo "Second line" >> logs/session.log', redirState);
 assert.equal(redir3.ok, true);
 assert.equal(getNode(redirState.root, `${HOME}/logs/session.log`)?.content, 'New header\nSecond line\n');
 
-// 追加到不存在的文件（应自动创建）
+// Append to non-existent file (should create)
 let redir4 = executeCommand('echo "First line" >> logs/new-file.log', redirState);
 assert.equal(redir4.ok, true);
 assert.equal(getNode(redirState.root, `${HOME}/logs/new-file.log`)?.content, 'First line\n');
 
-// 失败用例：父目录不存在
+// Failure case: parent directory does not exist
 let beforeFail = JSON.stringify(redirState.root);
 assert.equal(executeCommand('echo "fail" > missing-dir/file.log', redirState).ok, false);
 assert.equal(JSON.stringify(redirState.root), beforeFail);
 
-// 失败用例：目标是目录
+// Failure case: target is directory
 assert.equal(executeCommand('echo "fail" > logs', redirState).ok, false);
 assert.equal(JSON.stringify(redirState.root), beforeFail);
 
-// 失败用例：缺少目标路径
+// Failure case: missing target path
 assert.equal(executeCommand('echo "fail" >', redirState).ok, false);
 assert.equal(JSON.stringify(redirState.root), beforeFail);
 
-// 失败用例：左侧命令不支持重定向（本阶段仅支持 echo 与 cat）
+// Failure case: left command does not support redirection (only echo and cat supported)
 assert.equal(executeCommand('ls > logs/list.txt', redirState).ok, false);
 assert.equal(JSON.stringify(redirState.root), beforeFail);
 
-// 失败用例：左侧命令执行失败时不创建/修改目标文件
+// Failure case: left command fails, target file not created/modified
 assert.equal(executeCommand('cat missing.txt > logs/fail.txt', redirState).ok, false);
 assert.equal(getNode(redirState.root, `${HOME}/logs/fail.txt`), null);
 
-// cat 输出重定向
+// cat output redirection
 let catRedir = executeCommand('cat logs/new-file.log > logs/copy.log', redirState);
 assert.equal(catRedir.ok, true);
 assert.equal(getNode(redirState.root, `${HOME}/logs/copy.log`)?.content, 'First line\n');
 
-// 3. run 命令
+// 3. run command
 let scriptRoot = createUnit5FileSystem('run');
 let runState = { root: scriptRoot, cwd: HOME, successfulCommands: [], output: [] };
 
-// 缺少参数
+// Missing argument
 assert.equal(executeCommand('run', runState).ok, false);
-// 脚本不存在
+// Script not found
 assert.equal(executeCommand('run scripts/missing.txt', runState).ok, false);
 
-// 正常执行 start-class.txt
+// Normal execution of start-class.txt
 let runRes = executeCommand('run scripts/start-class.txt', runState);
 assert.equal(runRes.ok, true);
 assert.equal(runRes.run, true);
 assert.equal(getNode(runState.root, `${HOME}/logs/session.log`)?.content, 'Lesson started\nDevices ready\n');
 
-// 重复运行验证：由于第一行用 >，第二行用 >>，内容不累积重复
+// Repeated execution: first line resets with >, second line appends with >>
 let runRes2 = executeCommand('run scripts/start-class.txt', runState);
 assert.equal(runRes2.ok, true);
 assert.equal(getNode(runState.root, `${HOME}/logs/session.log`)?.content, 'Lesson started\nDevices ready\n');
 
-// 中途失败：验证报错包含行号，且前序修改保留
+// Mid-script failure: line number reported, prior changes preserved
 const stevenNode = getNode(runState.root, HOME);
 stevenNode.children.scripts.children['broken.txt'] = {
   type: 'file',
@@ -361,11 +361,10 @@ stevenNode.children.scripts.children['broken.txt'] = {
 };
 let brokenRes = executeCommand('run scripts/broken.txt', runState);
 assert.equal(brokenRes.ok, false);
-assert.match(brokenRes.output, /第 2 行/);
-// Step 1 已执行并保留
+assert.match(brokenRes.output, /line 2/i);
 assert.equal(getNode(runState.root, `${HOME}/logs/broken.log`)?.content, 'Step 1\n');
 
-// 禁止嵌套 run
+// Nested run forbidden
 stevenNode.children.scripts.children['nested.txt'] = {
   type: 'file',
   name: 'nested.txt',
@@ -373,46 +372,46 @@ stevenNode.children.scripts.children['nested.txt'] = {
 };
 let nestedRes = executeCommand('run scripts/nested.txt', runState);
 assert.equal(nestedRes.ok, false);
-assert.match(nestedRes.output, /禁止在脚本中嵌套执行 run/);
+assert.match(nestedRes.output, /cannot nest run/i);
 
-// 行数与大小限制测试
+// Line count and size limit tests
 let longContent = Array.from({ length: 60 }, (_, i) => `echo line ${i}`).join('\n');
 stevenNode.children.scripts.children['too-long.txt'] = { type: 'file', name: 'too-long.txt', content: longContent };
 assert.equal(executeCommand('run scripts/too-long.txt', runState).ok, false);
 
-// 4. 单元 5 四个任务判定测试
-// 任务 1：让终端输出一句话
+// 4. Unit 5 task evaluation tests
+// Task 1: Print a Message to the Terminal
 let u5t1State = { root: createUnit5FileSystem('echo'), cwd: HOME, successfulCommands: [], output: [] };
 assert.equal(tasks[16].check({ state: u5t1State }), false);
-// 错误文本
+// Wrong text
 let wrongEcho = executeCommand('echo "Hello World"', u5t1State);
 u5t1State.output.push({ command: 'echo "Hello World"', ...wrongEcho });
 assert.equal(tasks[16].check({ state: u5t1State }), false);
-// 正确文本（双引号）
+// Correct text (double quotes)
 let rightEcho = executeCommand('echo "Welcome to STEM Lab"', u5t1State);
 u5t1State.output.push({ command: 'echo "Welcome to STEM Lab"', ...rightEcho });
 assert.equal(tasks[16].check({ state: u5t1State }), true);
-// 单引号等价解法
+// Single quotes solution
 let u5t1Alt = { root: createUnit5FileSystem('echo'), cwd: HOME, successfulCommands: [], output: [] };
 let singleEcho = executeCommand("echo 'Welcome to STEM Lab'", u5t1Alt);
 u5t1Alt.output.push({ command: "echo 'Welcome to STEM Lab'", ...singleEcho });
 assert.equal(tasks[16].check({ state: u5t1Alt }), true);
 
-// 任务 2：把输出保存成日志
+// Task 2: Save Output into a Log File
 let u5t2State = { root: createUnit5FileSystem('redirect'), cwd: HOME, successfulCommands: [], output: [] };
 assert.equal(tasks[17].check({ state: u5t2State }), false);
 let writeLog = executeCommand('echo "Lesson started" > logs/session.log', u5t2State);
 assert.equal(writeLog.ok, true);
 u5t2State.output.push({ command: 'echo "Lesson started" > logs/session.log', ...writeLog });
-// 未用 cat 检查前，尚未完成
+// Not complete before cat check
 assert.equal(tasks[17].check({ state: u5t2State }), false);
 let catCheck = executeCommand('cat logs/session.log', u5t2State);
 assert.equal(catCheck.ok, true);
 u5t2State.output.push({ command: 'cat logs/session.log', ...catCheck });
 assert.equal(tasks[17].check({ state: u5t2State }), true);
 
-// 任务 3：追加记录，不丢失旧内容
-// 1. 首次进入时的初始状态核对：logs/session.log 已经存在且包含开课记录
+// Task 3: Append Records Without Losing Old Data
+// Initial state: logs/session.log exists with start record
 const initT3Fs = createUnit5FileSystem('append');
 const initT3Log = getNode(initT3Fs, `${HOME}/logs/session.log`);
 assert.equal(initT3Log?.type, 'file');
@@ -421,48 +420,47 @@ assert.equal(initT3Log?.content, 'Lesson started\n');
 let u5t3State = { root: createUnit5FileSystem('append'), cwd: HOME, successfulCommands: [], output: [] };
 assert.equal(tasks[18].check({ state: u5t3State }), false);
 
-// 2. 错误操作：误用 > 覆盖丢失旧记录，判定不通过
+// Error case: accidentally overwriting with > fails task
 let errState = { root: createUnit5FileSystem('append'), cwd: HOME, successfulCommands: [], output: [] };
 let errCmd = executeCommand('echo "Device check: OK" > logs/session.log', errState);
 errState.successfulCommands.push('echo "Device check: OK" > logs/session.log');
 assert.equal(tasks[18].check({ state: errState }), false);
 
-// 3. 证明不会永久锁死：用户在误操作后，通过合法操作重新写入第 1 行并追加后续行，仍能通过
+// Recovery: restoring initial line and appending subsequent lines passes
 executeCommand('echo "Lesson started" > logs/session.log', errState);
 errState.successfulCommands.push('echo "Lesson started" > logs/session.log');
 executeCommand('echo "Device check: OK" >> logs/session.log', errState);
 errState.successfulCommands.push('echo "Device check: OK" >> logs/session.log');
 executeCommand('echo "Network connected" >> logs/session.log', errState);
 errState.successfulCommands.push('echo "Network connected" >> logs/session.log');
-assert.equal(tasks[18].check({ state: errState }), true, '合法恢复日志内容后应能正常通过，绝不永久锁死');
+assert.equal(tasks[18].check({ state: errState }), true, 'Recovering log content allows task completion');
 
-// 4. 重置本关后的正常完成路径：使用 >> 连续追加两条
+// Normal workflow: appending two lines with >>
 let resetT3State = { root: createUnit5FileSystem('append'), cwd: HOME, successfulCommands: [], output: [] };
 executeCommand('echo "Device check: OK" >> logs/session.log', resetT3State);
 resetT3State.successfulCommands.push('echo "Device check: OK" >> logs/session.log');
-assert.equal(tasks[18].check({ state: resetT3State }), false); // 还需第二条
+assert.equal(tasks[18].check({ state: resetT3State }), false);
 executeCommand('echo "Network connected" >> logs/session.log', resetT3State);
 resetT3State.successfulCommands.push('echo "Network connected" >> logs/session.log');
 assert.equal(tasks[18].check({ state: resetT3State }), true);
-// 验证内容顺序
 let finalContent = getNode(resetT3State.root, `${HOME}/logs/session.log`).content;
 assert.equal(finalContent, 'Lesson started\nDevice check: OK\nNetwork connected\n');
 
-// 任务 4：运行第一份自动化清单
+// Task 4: Run Your First Automation Checklist
 let u5t4State = { root: createUnit5FileSystem('run'), cwd: HOME, successfulCommands: [], output: [] };
 assert.equal(tasks[19].check({ state: u5t4State }), false);
-// 步骤 1：cat 查看脚本
+// Step 1: inspect script with cat
 let catScript = executeCommand('cat scripts/start-class.txt', u5t4State);
 assert.equal(catScript.ok, true);
 u5t4State.output.push({ command: 'cat scripts/start-class.txt', ...catScript });
 assert.equal(tasks[19].check({ state: u5t4State }), false);
-// 步骤 2：run 执行脚本
+// Step 2: run script with run
 let runClass = executeCommand('run scripts/start-class.txt', u5t4State);
 assert.equal(runClass.ok, true);
 u5t4State.output.push({ command: 'run scripts/start-class.txt', ...runClass });
 assert.equal(tasks[19].check({ state: u5t4State }), true);
 
-// 验证重复执行检查：再次运行该示例脚本，日志依然保持预期的两行
+// Repeated execution maintains two lines
 let runAgain = executeCommand('run scripts/start-class.txt', u5t4State);
 assert.equal(runAgain.ok, true);
 let logContentAfterRepeat = getNode(u5t4State.root, `${HOME}/logs/session.log`).content;
@@ -470,132 +468,130 @@ assert.equal(logContentAfterRepeat, 'Lesson started\nDevices ready\n');
 assert.equal(tasks[19].check({ state: u5t4State }), true);
 
 // ==========================================
-// 单元 6：读懂命令与查找帮助 测试
+// Unit 6: Command Structure and Help Tests
 // ==========================================
 
-// 1. 帮助命令增强测试：help 与 help <命令名>
+// 1. Help command enhancements
 let helpState = fresh();
 let generalHelp = executeCommand('help', helpState);
 assert.equal(generalHelp.ok, true);
-assert.match(generalHelp.output, /支持的命令/);
+assert.match(generalHelp.output, /Supported commands/);
 
 let helpWc = executeCommand('help wc', helpState);
 assert.equal(helpWc.ok, true);
-assert.match(helpWc.output, /wc -l 文件路径/);
+assert.match(helpWc.output, /wc -l file_path/);
 assert.equal(helpWc.commandHelp, 'wc');
 
 let helpRun = executeCommand('help run', helpState);
 assert.equal(helpRun.ok, true);
-assert.match(helpRun.output, /【网站专用教学命令/);
+assert.match(helpRun.output, /\[Lab practice tool/);
 
 let helpUnknown = executeCommand('help unknown_cmd', helpState);
 assert.equal(helpUnknown.ok, false);
-assert.match(helpUnknown.output, /未知命令/);
+assert.match(helpUnknown.output, /unknown command/i);
 
 let helpTooMany = executeCommand('help wc ls', helpState);
 assert.equal(helpTooMany.ok, false);
-assert.match(helpTooMany.output, /一次只接受一个命令名参数/);
+assert.match(helpTooMany.output, /takes only one command name/i);
 
-// 2. 单元 6 任务 1：看懂命令的三个部分（grep -i python "Course Notes.txt"）
+// 2. Unit 6 Task 1: Understand the Three Command Parts
 let u6t1State = { root: createUnit6FileSystem('parts'), cwd: HOME, successfulCommands: [], output: [] };
 assert.equal(tasks[20].check({ state: u6t1State }), false);
 
-// 错误尝试 A：缺少引号导致文件名被拆分成两个参数
+// Unquoted spaces error
 let badQuotes = executeCommand('grep -i python Course Notes.txt', u6t1State);
 assert.equal(badQuotes.ok, false);
 
-// 错误尝试 B：未加 -i 选项，仅匹配小写的 1 行
+// Missing -i option (only 1 match)
 let noOption = executeCommand('grep python "Course Notes.txt"', u6t1State);
 assert.equal(noOption.ok, true);
 u6t1State.output.push({ command: 'grep python "Course Notes.txt"', ...noOption });
 assert.equal(tasks[20].check({ state: u6t1State }), false);
 
-// 正确执行：带 -i 选项，双引号包裹带空格文件名
+// Correct execution: -i option and double quoted file name
 let goodT1Double = executeCommand('grep -i python "Course Notes.txt"', u6t1State);
 assert.equal(goodT1Double.ok, true);
 assert.equal(goodT1Double.matchedLines.length, 2);
 u6t1State.output.push({ command: 'grep -i python "Course Notes.txt"', ...goodT1Double });
 assert.equal(tasks[20].check({ state: u6t1State }), true);
 
-// 等价解法：单引号包裹文件名
+// Single quoted solution
 let u6t1Single = { root: createUnit6FileSystem('parts'), cwd: HOME, successfulCommands: [], output: [] };
 let goodT1Single = executeCommand("grep -i python 'Course Notes.txt'", u6t1Single);
 assert.equal(goodT1Single.ok, true);
 u6t1Single.output.push({ command: "grep -i python 'Course Notes.txt'", ...goodT1Single });
 assert.equal(tasks[20].check({ state: u6t1Single }), true);
 
-// 3. 单元 6 任务 2：进入名字带空格的目录
+// 3. Unit 6 Task 2: Enter a Folder Name with Spaces
 let u6t2State = { root: createUnit6FileSystem('spaces'), cwd: `${HOME}/lessons`, successfulCommands: [], output: [] };
 assert.equal(tasks[21].check({ state: u6t2State }), false);
 
-// 错误尝试：未加引号直接 cd Summer Camp 会报错且 cwd 保持不变
+// Unquoted cd Summer Camp fails and keeps cwd unchanged
 let badCdSpace = executeCommand('cd Summer Camp', u6t2State);
 assert.equal(badCdSpace.ok, false);
 assert.equal(u6t2State.cwd, `${HOME}/lessons`);
 
-// 正确操作：cd "Summer Camp"
+// Quoted cd "Summer Camp" succeeds
 let cdQuotes = executeCommand('cd "Summer Camp"', u6t2State);
 assert.equal(cdQuotes.ok, true);
 u6t2State.cwd = cdQuotes.output;
 assert.equal(u6t2State.cwd, `${HOME}/lessons/Summer Camp`);
 
-// 执行 pwd 验证
+// Verify with pwd
 let pwdResult = executeCommand('pwd', u6t2State);
 assert.equal(pwdResult.ok, true);
 u6t2State.successfulCommands.push('pwd');
 
-// 读取 overview.txt
+// Read overview.txt
 let catOverview = executeCommand('cat overview.txt', u6t2State);
 assert.equal(catOverview.ok, true);
 u6t2State.output.push({ command: 'cat overview.txt', ...catOverview });
 assert.equal(tasks[21].check({ state: u6t2State }), true);
 
-// 4. 单元 6 任务 3：不会用时，先查帮助
+// 4. Unit 6 Task 3: When in Doubt, Check Help
 let u6t3State = { root: createUnit6FileSystem('help'), cwd: HOME, successfulCommands: [], output: [] };
 assert.equal(tasks[22].check({ state: u6t3State }), false);
 
-// 如果直接运行 wc -l notes.txt 而没有先查 help wc，任务不通过
+// Running wc -l without help wc fails check
 let wcDirect = executeCommand('wc -l notes.txt', u6t3State);
 assert.equal(wcDirect.ok, true);
 u6t3State.output.push({ command: 'wc -l notes.txt', ...wcDirect });
 assert.equal(tasks[22].check({ state: u6t3State }), false);
 
-// 执行 help wc 查看帮助
+// Running help wc
 let helpWcTask = executeCommand('help wc', u6t3State);
 assert.equal(helpWcTask.ok, true);
 u6t3State.output.push({ command: 'help wc', ...helpWcTask });
-// 此时已有 help wc 与 wc -l 输出，判定通过
 assert.equal(tasks[22].check({ state: u6t3State }), true);
 
-// 5. 单元 6 任务 4：读懂错误，再修正
+// 5. Unit 6 Task 4: Read the Error, Then Fix It
 let u6t4State = { root: createUnit6FileSystem('fix'), cwd: HOME, successfulCommands: [], output: [] };
 assert.equal(tasks[23].check({ state: u6t4State }), false);
 
-// 模拟初学者复合连写错误：cd lessons pwd
+// Composite command error: cd lessons pwd
 let badComposite = executeCommand('cd lessons pwd', u6t4State);
 assert.equal(badComposite.ok, false);
-assert.equal(u6t4State.cwd, HOME, '错误命令不能修改当前工作目录');
+assert.equal(u6t4State.cwd, HOME, 'Error command must not change cwd');
 
-// 修正并分步执行：
-// 步骤 1：cd lessons
+// Step 1: cd lessons
 let cdLessons = executeCommand('cd lessons', u6t4State);
 assert.equal(cdLessons.ok, true);
 u6t4State.cwd = cdLessons.output;
 u6t4State.successfulCommands.push('cd lessons');
 
-// 步骤 2：pwd 确认位置
+// Step 2: pwd
 let pwdFix = executeCommand('pwd', u6t4State);
 assert.equal(pwdFix.ok, true);
 u6t4State.successfulCommands.push('pwd');
 
-// 步骤 3：cat course-overview.txt 读取说明
+// Step 3: cat course-overview.txt
 let catOverviewFix = executeCommand('cat course-overview.txt', u6t4State);
 assert.equal(catOverviewFix.ok, true);
 u6t4State.output.push({ command: 'cat course-overview.txt', ...catOverviewFix });
 
 assert.equal(tasks[23].check({ state: u6t4State }), true);
 
-// 验证：不要求必须先输入错误命令，直接正确完成也应通过
+// Direct correct execution also passes
 let directCorrectState = { root: createUnit6FileSystem('fix'), cwd: HOME, successfulCommands: [], output: [] };
 let dirCd = executeCommand('cd lessons', directCorrectState);
 directCorrectState.cwd = dirCd.output;
@@ -606,4 +602,4 @@ let dirCat = executeCommand('cat course-overview.txt', directCorrectState);
 directCorrectState.output.push({ command: 'cat course-overview.txt', ...dirCat });
 assert.equal(tasks[23].check({ state: directCorrectState }), true);
 
-console.log('全部测试通过：路径解析、命令边界、防覆盖保护、单元 1～6 全部 24 个任务判定与自动化执行。');
+console.log('All tests passed: path parsing, command boundaries, overwrite protection, and all 24 tasks across Units 1-6.');
